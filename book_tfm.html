@@ -237,7 +237,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!--bookdown:toc:end-->
 <!--bookdown:body:start-->
 <!--chapter:end:index.Rmd-->
-<!--chapter:end:0-index.Rmd-->
 <div id="resumen" class="section level1 unnumbered">
 <h1>Resumen</h1>
 <ul>
@@ -360,7 +359,7 @@ documento .pdf final que se ofrece ha sido programado..<a href="#fn1" class="foo
 <p>Este obra está bajo una licencia de <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.es_ES">Creative Commons Reconocimiento-NoComercial-SinObraDerivada 4.0 Internacional</a>
 en una modalidad restrictiva, en espera de ser cambiada por otra licencia que permita
 modificaciones en un futuro.</p>
-<p><img src="../by-nc-nd-88x31.png" /><!-- --></p>
+<p><img src="../by-nc-nd-88x31.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="introduccion-a-la-problematica" class="section level1">
 <h1><span class="header-section-number">1</span> INTRODUCCIÓN A LA PROBLEMÁTICA</h1>
@@ -1049,19 +1048,19 @@ SHORT SURVEY 8</p>
 Se puede ver que hasta mediados de los años 80 apenas había un solo artículo por año. Sin embargo,
 a partir de los años 90 la producción científica sobre la emoción de la vergüenza en sociología
 aumenta cada vez más, llegando a tener más de 300 artículos en el año 2018.</p>
-<div class="figure">
-<img src="book_tfm_files/figure-html/unnamed-chunk-10-1.png" alt="Aumento de la producción científica temática" width="672" />
+<div class="figure" style="text-align: center">
+<img src="book_tfm_files/figure-html/unnamed-chunk-8-1.png" alt="Aumento de la producción científica temática" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-10)Aumento de la producción científica temática
+(#fig:unnamed-chunk-8)Aumento de la producción científica temática
 </p>
 </div>
 <p>Si consideramos las primeras 15 potencias mundiales dentro del estudio de la vergüenza por su producción, nos encontramos
 con que España queda fuera, estando la mayoría de estas potencias por debajo de los 200 artículos, con la excepción de UK
 y, sobre todo, EEUU con más de 1000 artículos.</p>
-<div class="figure">
-<img src="book_tfm_files/figure-html/unnamed-chunk-11-1.png" alt="Principales productores" width="672" />
+<div class="figure" style="text-align: center">
+<img src="book_tfm_files/figure-html/unnamed-chunk-9-1.png" alt="Principales productores" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-11)Principales productores
+(#fig:unnamed-chunk-9)Principales productores
 </p>
 </div>
 <p>Para conocer la realidad de los estudios de la vergüenza, se han considerado las palabras incluidas en los
@@ -1082,10 +1081,10 @@ la sexualidad, a la mujer y la salud mental.</p>
 claramente interpretable desde la teoría sociológica, así como desde la relación con otras emociones y asociaciones
 a colectivos concretos. Asimismo, en su mayoría se trata de una terminología inclinada hacia la negatividad de la
 realidad social, todo aquello que se trata de ocultar.</p>
-<div class="figure">
-<img src="book_tfm_files/figure-html/unnamed-chunk-13-1.png" alt="Relaciones entre los términos" width="672" />
+<div class="figure" style="text-align: center">
+<img src="book_tfm_files/figure-html/unnamed-chunk-11-1.png" alt="Relaciones entre los términos" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-13)Relaciones entre los términos
+(#fig:unnamed-chunk-11)Relaciones entre los términos
 </p>
 </div>
 </div>
@@ -1446,7 +1445,7 @@ recopilado y asociado.</p>
 ## ..$ content: chr &quot;may quieres amigo&quot;
 ## ..$ meta :List of 7
 ## .. ..$ author : chr(0)
-## .. ..$ datetimestamp: POSIXlt[1:1], format: &quot;2019-09-16 22:09:44&quot;
+## .. ..$ datetimestamp: POSIXlt[1:1], format: &quot;2019-09-16 22:25:36&quot;
 ## .. ..$ description : chr(0)
 ## .. ..$ heading : chr(0)
 ## .. ..$ id : chr &quot;1&quot;
@@ -1565,29 +1564,17 @@ la variable <code>sumario</code> y 3448 para la variable <code>texto</code>.</p>
 ## Weighting          : term frequency (tf)
 ## Sample             :
 ##       Terms
-## Docs   bien cine cinta final guion historia mejor pelicula peliculas
-##   129     0    0     0     0     0        0     0        2         0
-##   1605    0    0     0     0     0        0     0        0         0
-##   2638    0    1     0     0     0        0     0        0         0
-##   2675    2    0     0     1     0        0     0        1         0
-##   2752    0    0     0     0     0        0     0        1         0
-##   3297    0    0     0     0     0        0     0        0         0
-##   34      2    0     0     0     0        0     1        0         0
-##   688     0    1     0     0     0        0     0        0         1
-##   769     0    0     1     0     0        0     0        1         0
-##   947     0    0     0     0     0        0     0        1         1
-##       Terms
-## Docs   tan
-##   129    0
-##   1605   0
-##   2638   0
-##   2675   0
-##   2752   1
-##   3297   0
-##   34     0
-##   688    0
-##   769    0
-##   947    0</code></pre>
+## Docs   bien cine cinta final guion historia mejor pelicula peliculas tan
+##   129     0    0     0     0     0        0     0        2         0   0
+##   1605    0    0     0     0     0        0     0        0         0   0
+##   2638    0    1     0     0     0        0     0        0         0   0
+##   2675    2    0     0     1     0        0     0        1         0   0
+##   2752    0    0     0     0     0        0     0        1         0   1
+##   3297    0    0     0     0     0        0     0        0         0   0
+##   34      2    0     0     0     0        0     1        0         0   0
+##   688     0    1     0     0     0        0     0        0         1   0
+##   769     0    0     1     0     0        0     0        1         0   0
+##   947     0    0     0     0     0        0     0        1         1   0</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">dtm_texto3 &lt;-<span class="st"> </span><span class="kw">removeSparseTerms</span>(dtm_texto2, <span class="fl">0.99</span>)</a>
 <a class="sourceLine" id="cb34-2" title="2"><span class="kw">inspect</span>(dtm_texto3)</a></code></pre></div>
 <pre><code>## &lt;&lt;DocumentTermMatrix (documents: 3878, terms: 3448)&gt;&gt;
@@ -1692,9 +1679,9 @@ frente a un 11,9% de muy buenas.</p>
 <a class="sourceLine" id="cb43-8" title="8">                <span class="st">&#39;5 (11,9%)&#39;</span>),</a>
 <a class="sourceLine" id="cb43-9" title="9">  <span class="dt">border =</span> F)</a></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-43-1.png" alt="Frecuencia relativa de las diferentes puntuaciones" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-41-1.png" alt="Frecuencia relativa de las diferentes puntuaciones" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-43)Frecuencia relativa de las diferentes puntuaciones
+(#fig:unnamed-chunk-41)Frecuencia relativa de las diferentes puntuaciones
 </p>
 </div>
 </div>
@@ -1719,12 +1706,10 @@ a menor.</p>
 <a class="sourceLine" id="cb45-2" title="2">term_frecuentes_text  &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">colSums</span>(df_tm_text), <span class="dt">decreasing =</span> T)</a>
 <a class="sourceLine" id="cb45-3" title="3"></a>
 <a class="sourceLine" id="cb45-4" title="4">term_frecuentes_sum[<span class="dv">1</span><span class="op">:</span><span class="dv">15</span>] <span class="co"># 15 términos más frecuentes de sumario</span></a></code></pre></div>
-<pre><code>##  pelicula      cine  historia      bien     guion       tan peliculas 
-##      1231       596       331       243       218       216       207 
-##     mejor     final     cinta     buena      solo      hace      gran 
-##       205       186       184       176       172       169       168 
-##      buen 
-##       158</code></pre>
+<pre><code>##  pelicula      cine  historia      bien     guion       tan peliculas     mejor     final     cinta     buena      solo 
+##      1231       596       331       243       218       216       207       205       186       184       176       172 
+##      hace      gran      buen 
+##       169       168       158</code></pre>
 </div>
 <div id="las-nubes-de-palabras" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Las nubes de palabras</h3>
@@ -1750,18 +1735,18 @@ su frecuencia.</p>
 <a class="sourceLine" id="cb48-7" title="7"><span class="kw">wordcloud</span>(nube_sum<span class="op">$</span>word, nube_sum<span class="op">$</span>freq,<span class="dt">scale =</span> <span class="kw">c</span>(<span class="dv">4</span>,.<span class="dv">5</span>), <span class="dt">random.order =</span> F,</a>
 <a class="sourceLine" id="cb48-8" title="8">          <span class="dt">ordered.color =</span> T, <span class="dt">colors =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">use.r.layout =</span> T)</a></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-49-1.png" alt="Nubes de palabras" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-47-1.png" alt="Nubes de palabras" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-491)Nubes de palabras
+(#fig:unnamed-chunk-471)Nubes de palabras
 </p>
 </div>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">wordcloud</span>(nube_text<span class="op">$</span>word, nube_text<span class="op">$</span>freq, <span class="dt">scale =</span> <span class="kw">c</span>(<span class="dv">5</span>,.<span class="dv">25</span>), <span class="dt">max.word =</span> <span class="dv">200</span>,</a>
 <a class="sourceLine" id="cb49-2" title="2">          <span class="dt">random.order =</span> F, <span class="dt">ordered.colors =</span> T, <span class="dt">colors =</span> <span class="st">&quot;red&quot;</span>, </a>
 <a class="sourceLine" id="cb49-3" title="3">          <span class="dt">use.r.layout =</span> T)</a></code></pre></div>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-49-2.png" alt="Nubes de palabras" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-47-2.png" alt="Nubes de palabras" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-492)Nubes de palabras
+(#fig:unnamed-chunk-472)Nubes de palabras
 </p>
 </div>
 </div>
@@ -2018,16 +2003,13 @@ trata de afirmar que estas palabras sean exclusivas ni únicas de
 utilidad en este contexto.</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># Visualizamos 10 términos dentro de cada categoría</span></a>
 <a class="sourceLine" id="cb68-2" title="2">amplificadores[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
-<pre><code>##  [1] &quot;extremadamente&quot; &quot;cierto&quot;         &quot;enorme&quot;        
-##  [4] &quot;enormemente&quot;    &quot;extremo&quot;        &quot;muy&quot;           
-##  [7] &quot;altamente&quot;      &quot;enormemente&quot;    &quot;inmensamente&quot;  
-## [10] &quot; incalculable&quot;</code></pre>
+<pre><code>##  [1] &quot;extremadamente&quot; &quot;cierto&quot;         &quot;enorme&quot;         &quot;enormemente&quot;    &quot;extremo&quot;        &quot;muy&quot;           
+##  [7] &quot;altamente&quot;      &quot;enormemente&quot;    &quot;inmensamente&quot;   &quot; incalculable&quot;</code></pre>
 <div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">negadores[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>]</a></code></pre></div>
 <pre><code>## [1] &quot;no&quot;      &quot;sin&quot;     &quot;nunca&quot;   &quot;jamas&quot;   &quot;tampoco&quot; &quot;ni&quot;</code></pre>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">diminuidores[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a></code></pre></div>
-<pre><code>##  [1] &quot;apenas&quot;        &quot;relativamente&quot; &quot;debilmente&quot;    &quot;poco&quot;         
-##  [5] &quot;poca&quot;          &quot;solamente&quot;     &quot;menos&quot;         &quot;casi&quot;         
-##  [9] &quot;ridiculamente&quot; &quot;inferior&quot;</code></pre>
+<pre><code>##  [1] &quot;apenas&quot;        &quot;relativamente&quot; &quot;debilmente&quot;    &quot;poco&quot;          &quot;poca&quot;          &quot;solamente&quot;     &quot;menos&quot;        
+##  [8] &quot;casi&quot;          &quot;ridiculamente&quot; &quot;inferior&quot;</code></pre>
 </div>
 <div id="aplicacion-de-polarity" class="section level2">
 <h2><span class="header-section-number">8.3</span> Aplicación de ‘polarity’</h2>
@@ -2145,9 +2127,9 @@ alrededor de 0 y, aparentemente, teniendo en cuenta las puntuaciones a
 partir de 0,5 hacia ambos lados de la distribución, predominan las
 puntuaciones positivas.</p>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-67-1.png" alt="Frecuencia absoluta de la polaridad de `texto`" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-65-1.png" alt="Frecuencia absoluta de la polaridad de `texto`" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-67)Frecuencia absoluta de la polaridad de <code>texto</code>
+(#fig:unnamed-chunk-65)Frecuencia absoluta de la polaridad de <code>texto</code>
 </p>
 </div>
 <p>En lo que se refiere a la variable sumario, se porduce el mismo efecto,
@@ -2156,9 +2138,9 @@ En cambio, se hace notorio el efecto de algunos casos que podrían ser
 atípicamente negativos, puesto que hay algunas puntuaciones que llegar a ser
 -3.</p>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-68-1.png" alt="Frecuencia absoluta de la polaridad de `sumario`" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-66-1.png" alt="Frecuencia absoluta de la polaridad de `sumario`" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-68)Frecuencia absoluta de la polaridad de <code>sumario</code>
+(#fig:unnamed-chunk-66)Frecuencia absoluta de la polaridad de <code>sumario</code>
 </p>
 </div>
 </div>
@@ -2270,9 +2252,9 @@ considerado “buena”.</p>
 pasará a a tener una probabilidad de haber calificado la película
 como “buena” con una probabilidad del 66%.</p>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-71-1.png" alt="Árbol de decisión sin polaridad" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-69-1.png" alt="Árbol de decisión sin polaridad" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-71)Árbol de decisión sin polaridad
+(#fig:unnamed-chunk-69)Árbol de decisión sin polaridad
 </p>
 </div>
 </div>
@@ -2285,9 +2267,9 @@ la puntuación de la película será “mala” con una probabilidad del
 más determina es <em>obra</em>, cuyo valor si es mayor que 1, clasifica a
 la película como “buena” con una probabilidad del 72%.</p>
 <div class="figure" style="text-align: center">
-<img src="book_tfm_files/figure-html/unnamed-chunk-73-1.png" alt="Árbol de decisión con polaridad" width="80%" />
+<img src="book_tfm_files/figure-html/unnamed-chunk-71-1.png" alt="Árbol de decisión con polaridad" width="80%" />
 <p class="caption">
-(#fig:unnamed-chunk-73)Árbol de decisión con polaridad
+(#fig:unnamed-chunk-71)Árbol de decisión con polaridad
 </p>
 </div>
 </div>
