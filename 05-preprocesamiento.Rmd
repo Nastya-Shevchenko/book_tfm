@@ -1,0 +1,260 @@
+# PREPROCESAMIENTO
+
+```{r , child = '_global_options.Rmd'}
+```
+
+Una vez que los datos están creados y guardados, se procede a su importación
+a la sesión de R. Esto se lleva a cabo para no tener que procesar cada vez
+la información desde 0, sino evitar este proceso pudiendo obtener los datos
+preparados de forma cómoda y computacionalmente sencilla.
+
+```{r }
+load('data/data.RData')
+```
+
+La función `str` permite ver un resumen tanto del contenido de cada variable
+como de su naturaleza y longitud. En este caso, vemos que se trata de un
+data frame con 4 variables, una numérica y 3 de texto, y 3878 observaciones
+para cada una de ellas. Además, se puede ver cómo los datos siguen 
+presentando ciertos problemas, como el caso de la variable `texto`, que 
+sigue conteniendo símbolos indeseados. En cambio, en este punto no le 
+prestamos atención, teniendo en cuenta que en el procesamiento posterior
+estos detalles serán depurados.
+
+```{r }
+# Vemos las características de las variables obtenidas
+str(data, width = 70, strict.width = 'wrap')
+```
+
+La librería `tm` es un conjunto de funciones centradas en el procesamiento de
+texto como una forma de iniciar minería de texto. Dentro de estas funciones
+se encuentran la creación de un tipo de objeto, denominado `corpus` para
+depurar y organizar la información, así como crear matrices de términos a 
+partir de los datos originales (Feinerer, 2018).
+
+## Preprocesamiento de la variable 'sumario'
+
+Disponemos de dos variables de descripción de la opinión: sumario y texto. 
+Habitualmente en los estudios de análisis de sentimientos u 'opinion 
+mining' se procesan datos de redes sociales como Twitter, que tienen
+límite de letras para los comentarios.
+
+
+Sin embargo, este enfoque, aunque computacionalmente más eficiente, puede
+complicar la determinación de las emociones o de la dirección de una opinión
+debido precisamente a que la cantidad de las palabras utilizadas es pequeña.
+En este sentido, este trabajo tiene como finalidad, entre otras, observar
+las diferencias de la capacidad de detección de aspectos emocionales en textos
+de diferente tamaño. En el caso de la variable `texto` se trata de párrafos,
+en principio sin límite de extensión.
+
+
+De este modo, la primera parte del preprocesamiento del dataset se centra
+específicamente en la depuración de la variable `sumario`. En primer lugar,
+se crea un objeto que hará referencia a la variable concreta, lo que nos
+permitirá referenciarla sin tener que recurrir a través de la base de datos,
+es decir, únicamente poniendo su nombre. 
+
+```{r }
+sumario2 <- data$sumario; length(sumario2)
+```
+
+Se crea un objeto de tipo `Volatile corpus` para la variable `sumario`. Se trata de
+un tipo de transformación de datos, ya que 'corpus' tiene en cuenta, además del 
+texto inicialmente introducido, una serie de variables a mayores. Por otro lado,
+se caracteriza, como su nombre indica, por la 'volatilidad', es decir, los datos
+contenidos y creados en el 'corpus' se borran al borrarse el objeto al que estaban
+asignados .
+
+```{r }
+# Creación de un objeto 'corpus' para aplicar 'tm'
+corpus_sumario <- VCorpus(VectorSource(sumario2))
+# Comprobación del funcionamiento correcto del corpus
+content(corpus_sumario[[5]]) # Contenido concreto del elemento 5
+```
+
+Para que sea posible analizar el texto de forma conjunta, es necesario
+estandarizar los datos.. En este sentido,
+las principales diferencias que nos podemos encontrar provienen de una serie
+de diferenciaciones, imprescindible para entendernos en el lenguaje escrito y
+hablado, pero que son ruido a la hora de llevar a cabo el análisis.
+
+Así pues, la función `tm_map` del paquete `tm` nos permite transformar
+los datos convirtiendo todo el texto en escritura a minúsculas, sin
+tildes, sin espacios en blanco y, por último,  sin 
+símbolos de puntuación. Esto  último, a su vez, resuelve posibles problemas de compatibilidad
+de encodings que en futuras etapas.
+
+```{r }
+    # Estandarización del texto: Transformaciones
+
+# Conversión a minúsculas
+corpus_sumario2 <- tm_map(corpus_sumario, content_transformer(tolower))
+# Eliminar símbolos de puntuación
+corpus_sumario2 <- tm_map(corpus_sumario2, removePunctuation)
+# Eliminar las puntuaciones no incluidas por defecto
+corpus_sumario2 <- tm_map(corpus_sumario2, content_transformer(gsub), 
+                          pattern = '[¿¡]+', replacement='')
+# Eliminar números
+corpus_sumario2 <- tm_map(corpus_sumario2, removeNumbers) 
+# Eliminar tildes
+corpus_sumario2 <- tm_map(corpus_sumario2, content_transformer(chartr),
+                          old = 'áàéèíìóòúù',new ='aaeeiioouu') 
+# Eliminar espacios en blanco
+corpus_sumario2 <- tm_map(corpus_sumario2, stripWhitespace)
+```
+
+En el apartado anterior mencionábamos la existencia de una serie de 'ruido'
+que se encuentra en los datos y dificulta el análisis, sin aportar información.
+Este concepto no se aplica únicamente al estilo de escritura, sino a una serie
+de palabras que por sí solas no tienen un significado específico. En lenguaje
+de minería de texto estas palabras se denominan `stopwords`.
+
+
+Existen diccionarios específicos de stopwords por lenguaje, por ejemplo,
+los artículos en castellano, pero también según la temática que se está
+tratando. En este caso concreto, eliminaremos únicamente las que se refieren
+al idioma, puesto que el objetivo que se persigue es observar las técnicas y
+no extraer conclusiones significativas sobre los datos.
+
+
+Por otro lado, no resulta preciso aplicar la eliminación de las stopwords
+sin tener en cuenta que estas, en principio, no han sido estandarizadas
+(pueden llevar tildes, por ejemplo). Por lo que, además de añadir unas
+muy pocas que aparecían muy frecuentemente y no se encontraban en la lista,
+como 'aunque', se procesan.
+
+
+Es importante volver a eliminar los espacios en blanco una vez que se 
+extraen las stopwords, ya que estos pueden producir problemas en la 
+lectura del texto resultante.
+
+```{r }
+stopwords('spanish')[1:10] # 10 stopwords en castellano
+
+# Normalización de stopwords: eliminación de tildes
+stopwords2 <- chartr(x = stopwords('spanish'), old = 'áàéèíìóòúù', 
+                     new = 'aaeeiioouu')
+# Eliminación de stopwords
+corpus_sumario3 <- tm_map(corpus_sumario2, removeWords, stopwords2) 
+# Creación de una lista de stopwords adicionales
+add_stopwords <- c('aunque', 'ver', 'puede', 'ser')
+# Eliminación de stopwords adicionales
+corpus_sumario3 <- tm_map(corpus_sumario3,removeWords,add_stopwords)
+# Eliminar espacios en blanco surgidos por la eliminación
+corpus_sumario3 <- tm_map(corpus_sumario3, stripWhitespace) 
+```
+
+Además del preprocesamiento llevado a cabo, existen otras herramientas
+que muchas veces se aplican a los datos de texto, como por ejemplo, *stemming*.
+Este procedimiento consiste en reducir las palabras presentes a sus raíces,
+lo que se suele resumir en eliminar la terminación.
+En este caso, no es recomendable aplicarlo porque los diccionarios están
+conformados con palabras enteras, tanto los que se utilizan para detectar
+el contenido emocional, como aquellos que aportan las stopwords o semejantes.
+
+Finalmente, podemos ver un ejemplo de las diferencias que se presentan
+entre el texto antes y después de procesar. Para ello, vemos el primer
+sumario del comentario que se encuentra en el dataset:
+
+```{r }
+data$sumario[1]
+content(corpus_sumario3[[1]])
+```
+
+## Preprocesamiento de la variable `texto`
+
+A continuación, se lleva a cabo el mismo procedimiento que para 
+la variable sumario, por lo que no requiere explicación del código 
+aplicado. La diferencia principal reside en la longitud del texto y,
+por otro lado, por la capacidad computacional que requiere su 
+manipulación. Esto es, a mayor longitud del texto, así como complejidad,
+el procesamiento lleva más tiempo.
+
+```{r }
+texto2 <- data$texto; length(texto2) # Eliminar casos vacíos
+
+# Creación de un objeto 'corpus' para aplicar 'tm'
+corpus_texto<- VCorpus(VectorSource(texto2))
+# Comprobación del funcionamiento correcto del corpus
+content(corpus_texto[[5]]) # Contenido concreto del elemento 5
+
+# Estandarización del texto: Transformaciones
+
+# Conversión a minúsculas
+corpus_texto2 <- tm_map(corpus_texto, content_transformer(tolower)) 
+# Eliminar símbolos de puntuación
+corpus_texto2 <- tm_map(corpus_texto2, removePunctuation) 
+# Eliminar las puntuaciones no incluidas por defecto
+corpus_texto2 <- tm_map(corpus_texto2, content_transformer(gsub), 
+                        pattern = '[¿¡]+', replacement='') 
+corpus_texto2 <- tm_map(corpus_texto2, removeNumbers) # Números
+# Eliminar tildes
+corpus_texto2 <- tm_map(corpus_texto2, content_transformer(chartr), 
+                        old = 'áàéèíìóòúù',new ='aaeeiioouu') 
+# Eliminación de stopwords
+corpus_texto3 <- tm_map(corpus_texto2, removeWords, stopwords2)
+# Eliminar stopwords añadidas
+corpus_texto3 <- tm_map(corpus_texto3,removeWords,add_stopwords)
+# Eliminar espacios en blanco
+corpus_texto3 <- tm_map(corpus_texto3, stripWhitespace)
+```
+
+## Combinación y guardado de los datos procesados
+
+Una vez que los datos están listos para ser analizados, la naturaleza
+del 'VCorpus' nos obliga a crear un archivo que los contenga, ya que de no ser
+así, al cerrar sesión se perdería el avance llevado a cabo. Esto solo es necesario
+para el análisis de sentimientos, ya que para otros análisis las
+herramientas no están implementadas en el paquete `tm`.
+
+Este proceso tiene
+como dificultad principal la naturaleza del objeto que se produce como 
+resultado de la conversión y del procesamiento del `corpus`. Esto es,
+el resultado es una lista de elementos, dentro de los cuales solamente 
+necesitaremos un elemento: `content`.
+
+Si aplicamos la función `str()` al primer elemento del objeto `corpus_sumario3`,
+obtenemos el resultado que nos indica la cantidad de información que se ha
+recopilado y asociado.
+
+```{r }
+str(corpus_sumario3[1], width = 80, strict.width = 'wrap')
+```
+
+El problema consiste en que no solamente se ha de tratar con una lista asociada
+al resultado, sino que esta lista está creada para cada elemento por separado.
+Por este motivo, es preciso formular una función que extraiga el contenido del
+elemento 'content' de cada uno de los comentarios del corpus.
+
+Para ello, se crean dos objetos vacíos, que se ocuparán con los resultados
+de la extracción de 'content' a partir de cada elemento del corpus, tanto
+para sumario como para texto.
+
+```{r, eval=FALSE }
+# Extracción del contenido procesado para 'sumario'
+new_sumario <- c() # Creamos objeto vacío para guardar los datos
+for (i in 1:length(corpus_sumario3)){
+ new_sumario[i] <- corpus_sumario3[[i]]$content
+}
+
+# Extracción del contenido procesado para 'texto'
+new_texto <- c()
+for (i in 1:length(corpus_texto3)){
+  new_texto[i] <- corpus_texto3[[i]]$content
+}
+```
+
+Por último, una vez que los objetos `new_sumario` y `new_texto` contienen las
+listas del `content` procesado anteriormente, es preciso combinarlos con las 
+variables originales no modificadas en una nueva base de datos `RData`.
+Para ello, primeramente se crea un nuevo data frame con las cuatro variables
+y, finalmente, se guarda en el directorio de trabajo bajo el nombre de 
+`df_procesado.RData`.
+
+```{r, eval=FALSE }
+df_procesado <- data.frame(data$puntuacion, data$titulo, new_sumario,
+                           new_texto, stringsAsFactors = FALSE)
+
+save(df_procesado, file = 'df_procesado.RData')
+```

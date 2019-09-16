@@ -1,0 +1,497 @@
+# EL ESTADO DE LA CUESTIÓN
+
+```{r , child = '_global_options.Rmd'}
+```
+
+El presente trabajo tiene una naturaleza inherentemente aplicada y enfocada hacia una metodología
+concreta. Por este motivo, la fundamentación teórica que se expondrá no busca ser exhaustiva,
+sino trata de encontrar la precisión conceptual y terminológica de las técnicas 
+de *sentiment analysis*.
+
+Este territorio ha permanecido en gran medida sin explorar por las ciencias sociales, así como
+por el ámbito académico en general, exceptuando la rama de la computación lingüística. 
+Así, antes de ser capaces de formular cualquier conclusión o proponer actuaciones, es preciso
+hacer una exploración, tratando de comprender cómo ha sido pensado por sus creadores.
+
+En lo que se refiere a las consideraciones teóricas, se lleva a cabo una
+aproximación introductoria hacia los principales conceptos relacionados con el lenguaje
+de programación `R`, el análisis de sentimientos y la terminología utilizada en él.
+
+## Una breve definición
+
+El análisis de sentimientos es un conjunto de técnicas pertenecientes al procesamiento
+automático del lenguaje natural, es decir, expresado en texto (Vilares, 2017). 
+Esta esfera se diferencia dentro del análisis de texto por su objetivo consistente
+en estudiar y extraer conclusiones acerca de las realidades subjetivas presentes en
+el discurso. Esta rama procede de lo que se conoce como `NLP` o procesamiento de 
+lenguaje natural, ligado a la minería de 
+texto y minería web. En la definición de análisis de sentimientos, se expone que
+“analiza las opiniones, sentimientos, evaluaciones, actitudes y emociones
+de los individuos a partir del lenguaje escrito” (Liu, 2012).
+
+### Tradiciones según la naturaleza de los datos
+
+Existen principalmente dos tradiciones de análisis de sentimientos, diferenciados
+por la naturaleza de los datos y el planteamiento de las técnicas, teniendo cada 
+una de ellas objetivos, por consiguiente, diferenciados. Los datos, por un lado,
+pueden ser no supervisados, en los cuales no hay ninguna variable que nos puede dar información
+acerca de si las conclusiones que estamos extrayendo son acertadas o en qué medida 
+el instrumento de medida funciona adecuadamente, o bien supervisados, si
+han sido tratados por expertos y clasificados, por lo
+que se dispone de una información para constrartar la bondad de las técnicas aplicadas.
+
+Estas dos tradiciones o estrategias son principalmente los siguientes (Vilares, 2017):
+
+#### Estrategia basada en el conocimiento
+
+La estrategia basada en el conocimiento, *knowledge based strategy*, se caracteriza
+por el trato con datos de naturaleza no supervisada y el uso de diccionarios de 
+palabras puntuadas en función de la positividad o negatividad de la emoción o la carga
+emocional. El software habitualmente utilizado en este enfoque es R. Este conjunto de
+procedimientos tiene, a su vez, dos enfoques principales:
+
+##### Análisis semántico
+
+Estudio léxico de los datos no supervisados con la ayuda de diccionarios, 
+persiguiendo la finalidad de describir los datos o bien poner a prueba diferentes
+técnicas (como en el caso del presente estudio).
+Los diccionarios son conjuntos de términos, cada uno de los cuales tiene asignada una
+determinada puntuación, dependiendo de si se considera de naturaleza positiva o negativa.
+En este sentido, solamente se van a detectar y categorizar aquellas palabras que aparezcan
+en estos diccionarios y de forma en la que están definidas sus posibilidades de aparición.
+
+La utilización de los diccionarios es el enfoque más próximo a las ciencias sociales,
+en el que se puede plantear un léxico específico para diferentes problemas de estudio.
+Esto incluye la identificación de las emociones, cuestión que no ha recibido excesiva
+atención a lo largo del desarrollo de *sentiment analysis*.
+    
+##### Análisis sintáctico
+
+Estudio sintáctico para datos en un solo idioma, contemplando la posibilidad de
+establecer una combinación de las dos técnicas para los datos no supervisados.
+
+### Estrategia del aprendizaje automático
+
+La estrategia basada en el aprendizaje automático, *machine learning strategy*, se
+caracteriza por el trato con datos supervisados, lo que permite estudiar la 
+bondad de ajuste, y la aplicación de algoritmos con fines de clasificación, 
+predicción, etc. Esta rama contiene una diferenciación interna atendiendo a su 
+aplicación a conjuntos de datos de un solo idioma o varios al mismo tiempo.
+El software utilizado habitualmente para este tipo de análisis es Python.
+
+En este caso se suelen aplicar las redes neuronales o SVM, máquinas de soporte vectorial.
+Las redes neuronales son modelos computaciones constituidas por 'nodos' interconectados
+entre sí, que tienen el fin de, a partir de las conexiones, ser capaces de clasificar
+o predecir unos determinados datos. Por otro lado, las máquinas de soporte vectorial
+son transformaciones no lineales realizadas a los datos en relación a un espacio (Benacourt,
+2005).
+Estas técnicas presentan un gran inconveniente: sus resultados son difícilmente 
+interpretables.
+
+## Emociones y terminología
+
+Teniendo en cuenta que el lenguaje es lo que hace posible la comunicación
+y la comprensión, la terminología utilizada por los desarrolladores de las
+técnicas de análisis de sentimientos es clave a la hora de entender cómo
+están constituidas las técnicas y, sobre todo, qué es exactamente lo que se estudia.
+
+Revisando principalmente a Bing Liu (2015) como el máximo exponente de la
+literatura especializada en el campo del análisis de sentimientos, resulta
+apreciable la consideración que se le da a los diferentes problemas
+inherentes del objeto de estudio, derivados de una cuestión central:
+la expresión de la subjetividad de las personas.
+
+Así, se tienen en cuenta numerosos problemas, como por ejemplo, la 
+diferencia entre la emoción expresada explícita e implícitamente, 
+la ironía y el sarcasmo y otras tantas problemáticas propias de estas
+técnicas y de la complejidad de su desarrollo.
+
+Un inconveniente clave surge en el momento en el que se define la palabra
+*sentimiento* como un sinónimo de *opinión* ^[Las expresiones terminológicas suponen una
+problemática que no se estudiará exhaustivamente en el presente trabajo. En cambio,
+se ha de indicar que no se puede pasar por alto la propia relevancia de la esfera 
+emocional denominada como *sentimiento*]. Dentro de este concepto
+de opinión se diferencian los siguientes niveles:
+
+- Opinión comparativa y regular, pudiendo ser esta última directa o indirecta.
+- Opinión subjetiva y basada en hechos.
+
+En cuanto a las emociones, que nunca son denominadas como tales, son procedentes de
+la psicología, siguiendo a autores como Parrott (2001), Arnold (1960)...
+En todo caso, el principal acento y desarrollo de las herramientas
+está siempre planteado en función de la polaridad: lo positivo, negativo o
+neutro de una *opinión*.
+
+Por lo tanto, a pesar de lo atractivo que suena, una vez entrados a estudiar este ámbito,
+nos damos cuenta de que el planteamiento que se encuentra en el corazón de
+esta técnica se basa en la asignación de una puntuación positiva o negativa
+de la emoción del individuo hacia un objeto o “target” concreto 
+(Almashraee, Monett, and Paschke, 2016) y no en la identificación
+de la emoción o sus relaciones con los argumentos descritos.
+
+Esto revela el objetivo de la creación de las técnicas: determinar si
+los individuos se predisponen positiva o negativamente hacia algo. Por
+lo tanto, las emociones realmente no importan. Lo que sí importa es saber si uno 
+se siente bien o mal en relación a ese objetivo de la cámara Canon y,
+por consiguiente, si la comprará o recomendará a sus amigos.
+
+Viendo esto, se esclarece que el desarrollo de las herramientas no está
+preparado, ni planteado, para el estudio de las emociones, lo que hace que
+se pierda la mayor parte del potencial que se espera al escuchar de su
+existencia.
+
+## Procesamiento de texto y niveles de análisis
+
+Aunque el análisis de sentimientos sea una rama específica dentro del análisis de
+texto, esto no evita la necesidad de su procesamiento, tal como una forma de preparación
+para la aplicación de las técnicas. Esto es, se ha de llevar a cabo un análisis de
+texto, sin atender a la esfera emocional primero, para poder establecer posteriormente
+determinados objetivos relacionados con esta.
+
+Así pues, dependiendo de los aspectos que se quieren analizar concretamente, el 
+preprocesamiento de los datos varía enormemente. En este sentido, el primer paso
+conlleva un manejo de los diferentes formatos en los que los datos de texto son
+contenidos, dentro de los cuales podemos encontrar .DOC, .PDF, .XML, .HTML, JSON, etc.
+
+Además de tener en cuenta el contacto inicial y la preparación de una estructura
+de texto accesible y procesable, se crea un objeto denominado `corpus`, que 
+establece una forma específica de organización interna de los datos, así como 
+una determinada información. 
+
+En el procesamiento del lenguaje natural se plantean principalmente tres tipos
+de análisis según el nivel del contenido y la estructura que se desea estudiar
+(Pozzi, Fersini, Messina y Liu, 2017):
+
+- El nivel de *mensaje* determina cuál es la puntuación de polaridad de la
+opinión que se presenta en un texto.
+- El nivel de la *oración* supone que en cada una de ellas se encuentra
+una opinión específica.
+- El nivel de *entidad* o de *aspecto* contempla la importancia de una
+opinión teniendo en cuenta el objeto o *target* al que va dirigida, por lo que
+combina el nivel del mensaje y el de la oración, identificando las opiniones
+en relación a cada *target*.
+
+En este caso, siendo la formulación con el programa `R`, se utiliza el paquete 
+`tm`, escogiendo como entidad propia las palabras, dentro de los diferentes
+niveles que se pueden tener en cuenta en de la herramienta. Partiendo de las
+palabras:
+
+- El texto se puede descomponer en *caracteres*, cada una de las cuales 
+sería una unidad independiente e influyente en el resto. Por caracter 
+se entienden no solamente las letras, sino también los números, los espacios, etc.
+
+- Se puede considerar como nivel principal la *palabra* en un sentido semántico.
+En este tipo de planteamiento del análisis se suelen llevar a cabo procedimientos de
+reducción de la variabilidad, con el fin de reducir el volumen de datos, puesto que
+cada palabra equivaldría en algunas técnicas a una variable.
+
+- Por último, dentro del texto se puede conceder la importancia a los *conceptos*.
+La diferencia principal del nivel de la palabra y el concepto, está en que 
+este último tiene en cuenta la sinonimia y la polisemia.
+
+## Uso del lenguaje de programación `R`
+
+`R`  es un lenguaje de programación (R Core Team), gratuito y de código abierto,
+con una comunidad activa,
+destinado y utilizado principalmente con fines estadísticos (Paradis & Ahumada, 2003).
+Esta herramienta, como es propio de los lenguajes de programación, se constituye como un 
+espacio de creación, por lo que las posibilidades de desarrollo, así como de aplicación son numerosas.
+
+Este lenguaje se descarga con una interfaz gráfica mínima, que permite incluir “paquetes”  o librerías
+que faciliten el tratamiento sin tener que utilizar el código o la sintaxis con conocimientos
+de desarrollador. Es decir, determinadas herramientas están formuladas en *funciones* o 
+*comandos* ^[Las funciones son las instrucciones concretas que se dan al lenguaje de programación
+para que se lleve a cabo cualquier acción deseada. Es posible formular varias acciones en una misma
+función, lo que facilita significativamente el proceso de programación y de  utilización del
+lenguaje en general.], que vamos a utilizar para llevar a cabo nuestros análisis
+(Oliden, 2009).
+
+Cuando se descarga `R`, la instalación incluye un conjunto de instrucciones básicas
+(paquete `base`), a
+partir de las cuales se pueden llevar a cabo análisis o bien procesar los datos. Si
+queremos utilizar herramientas especializadas, será necesario instalar 'paquetes' o,
+dicho de otro modo, conjuntos de funciones que hayan sido previamente desarrolladas, 
+a no ser que seamos capaces de crearlas nosotros mismos.
+
+Así, se puede decir que está creado “por partes”: hay un núcleo con una serie de 
+instrucciones `base` a las que posteriormente se van añadiendo “colecciones de comandos”,
+los denominados “paquetes”. Estos, por su lado, son desarrollados para que no haya
+que hacer manualmente determinadas utilidades programándolas y pudiendo usar una
+sintaxis sencilla, automatizando y simplificando así muchas las utilidades o tareas
+que se pueden querer llevar a cabo, y para no tener que descargar todas las
+utilidades a la vez, lo que haría la instalación inviable computacionalmente.
+
+Además, se ha de tener en cuenta que la mayor parte de la metodología 
+implementada se basa en contribuciones de colaboradores, lo que
+produce que haya varios paquetes para el mismo objetivo y su calidad
+no esté garantizada.
+
+Por lo tanto, los principales componentes que se deben conocer son los comandos,
+que incluyen una única instrucción, las funciones, que pueden contener un
+conjunto amplio de instrucciones que se ejecuten de forma sucesiva o en bucle,
+y, por último, paquetes, que son conjuntos de funciones preparados para cumplir
+unos fines concretos.
+
+Por otro lado, existe una serie de herramientas creadas con interfaz gráfica, 
+como, por ejemplo, el paquete `rattle` para minería de datos numéricos. En 
+cambio, esta formulación limita enormemente las opciones que se pueden aplicar.
+Por este motivo, se suele utilizar `R` desde la propia consola, sin interfaz.
+
+### Herramientas para análisis de sentimientos
+
+Como comentábamos anteriormente, los paquetes disponibles para `R` están creados
+para cumplir con determinadas necesidades, por lo que también se encuentran disponibles
+librerías especializadas para el análisis de sentimientos. Entre estos se encuentran:
+`SentimentAnalysis`, `sentimentr`, `sentometrics`, `syuzhet` y `qdap`.
+
+Sin embargo, el único paquete que finalmente ha sido posible utilizar para la elaboración
+de este trabajo es `qdap`. Esto se debe a un descarte sucesivo de los restantes paquetes,
+por las razones siguientes;
+
+- `SentimentAnalysis` y `sentimentr`: no acepta idiomas, más allá de inglés.
+- `sentometrics`: estudia series de tiempo para datos de texto.
+
+Otra razón, que se constituye como la principal para descartar los paquetes existentes,
+es que ninguno de los paquetes, incluyendo `syuzhet`, documenta explícitamente
+con algoritmos y fórmulas los
+procedimientos que se aplican, por lo que los resultados del análisis no son 
+interpretables desde nuestra perspectiva.
+Esto es, no hay transparencia en la definición de la metodología, aunque sea
+posible ver el código original, tratándose de un lenguaje abierto.
+
+En lo que se refiere al paquete `qdap`, únicamente la función `polarity` ofrece
+una explicación del procedimiento en base a una formulación matemática expresada
+en su guía disponible online ^[Además, se ha de indicar que las fórmulas, tal
+y como aparecen, no están expresadas correctamente en esta guía, por lo que
+ha sido necesario expresarla en términos correctos. La expresión utilizada se
+puede ver en la aplicación práctica]. A pesar de estos inconvenientes, esta será la única
+aplicación específica del análisis de sentimientos que será posible utilizar,
+sin tener en cuenta la preparación de los datos.
+
+En cuanto a los diccionarios, algunos ejemplos que están traducidos a varios idiomas
+son el léxico *afinn* desarrollado por Finn rup Nielsen, *bing* desarrollado
+por Minqing Hu y  Bing Liu y, por último, *nrc* creado por Mohammad, Saif M. y Turney, 
+Peter D. Estos diccionarios, tal y como están formulados, no pueden combinarse
+directamente entre sí, puesto que tienen niveles de medición diferentes.
+
+Por último, para llevar a cabo el análisis de sentimientos es preciso anteriormente
+procesar el texto, como veremos posteriormente. Este procesamiento se lleva a cabo, 
+sobre todo, con la ayuda del paquete de minería de texto `tm`, que, a su vez,
+activa el paquete `NLP`.
+
+### Análisis de sentimientos para castellano
+
+Como mencionábamos anteriormente,  disponemos de herramientas
+creadas para la lengua inglesa, que con un pequeño “plus”, que son los léxicos o diccionarios,
+pueden ser adaptables. Esto es, se podría decir que no hay paquetes
+elaborados con el fin de analizar emociones pensando en texto en castellano (Miranda & Guzmán, 2017).
+
+Asimismo, habitualmente estos diccionarios, para idiomas que no sean inglés, suelen ser traducciones,
+más o menos automáticas, de diccionarios previamente elaborados para la lengua inglesa
+(Plaza del Arco & Jiménez-Zafra, 2018). Esto supone un relevante problema, en cuanto a que,
+por ejemplo, “disgusto” en castellano no tiene nada que ver con “disgust” en inglés, 
+aunque, en la práctica, muchas veces se traten como si fuesen sinónimos.
+
+En resumen, la práctica habitual a la hora de llevar a cabo el análisis de sentimientos
+es coger una herramienta hecha por y para inglés, traducirla a otro idioma,
+en este caso castellano, y analizar los resultados en base a la carga positiva o negativa
+del discurso a partir de aquellas emociones que se han definido en esos diccionarios (Sidorov, 2014).
+
+## El problema de las emociones concretas: Vergüenza
+
+Al estudiar las herramientas de análisis de sentimientos, nos damos cuenta del papel secundario
+que, paradójicamente, tienen las propias emociones en estas. Esta investigación inicialmente
+se planteó como una exploración de la identificación y el tratamiento de emociones concretas,
+hasta darnos cuenta de que no es posible llevarlo a cabo por la falta de estas mismas
+herramientas.
+
+En este sentido, como parte de la fundamentación teórica, se tiene en cuenta la emoción de
+la vergüenza ^[Este estudio se establece como una continuación de la investigación sobre la
+emoción de la vergüenza, denominada *Vergüenza como institución social* (Shevchenko, 2018).
+Para el presente estudio no resulta relevante cómo definamos las emociones concretas,
+sino cuál es su tratamiento en en el conjunto de técnicas conocidas como
+*análisis de sentimientos*. Por este motivo, la definición concreta de la 
+vergüenza, así como de otras emociones, no será expuesta en el presente documento.], 
+ejemplificada con el fin de mostrar tanto la falta de la presencia de las
+emociones, así como para aportar una perspectiva en la que el análisis de texto y el
+análisis bibliométrico está de la mano no solamente del estudio de las realidades
+sociales, sino también de la producción científica que las trata.
+
+Así, en primer lugar se planteó ver qué producción científica existe sobre el tema
+en la base de datos *Scopus* ^[La base de datos *Scopus* cada vez adquiere más
+relevancia, sobre todo en el mundo de habla hispana, por lo que ha sido
+escogida para el presente estudio como referencia.] (Faen Scopus, 2005)
+para ver la importancia concedida a este tema por la
+comunidad científica en general. Este estudio se llevó a cabo tras la revisión de
+los paquetes de análisis de sentimientos de `R` y para su estudio fue utilizado 
+el paquete `bibliometrix`.
+
+En este sentido, existen ciertos inconvenientes que se perciben no solamente en 
+las técnicas de análisis de sentimientos o de texto, sino que persisten a la
+esfera y a la producción de herramientas metodológicas. Dentro de estas problemáticas
+destacamos una principal: la falta de documentación detallada sobre las herramientas.
+
+En cuanto a la falta de documentación, hablamos no solamente de guías prácticas de
+su uso, sino también de transparencia de los procedimientos. La consecuencia
+mientras persiste este problema se reduce a que no somos capaces de *saber* qué
+son los resultados obtenidos.
+
+### Exploración bibliométrica
+
+Los estudios sobre la vergüenza han estado presentes con anterioridad en estudios de carácter psicológico y 
+antropológico, en cambio, la sociología ha permanecido alejada de las emociones durante más tiempo.
+Actualmente el interés en las emociones, y más concretamente sobre las emociones secundarias o sociales,
+crece de forma significativa.
+
+Para ver la naturaleza de este crecimiento, se ha desarrollado un estudio bibliométrico de la producción 
+científica en la base de datos SCOPUS desde su creación hasta diciembre de 2018. Acotando la búsqueda y 
+llevando a cabo un análisis exhaustivo del área, se han filtrado los resultados, seleccionando finalmente
+solo aquellas obras que pertenecen catalogadas como pertenecientes a las 'ciencias sociales'. Esta acotación 
+se habría constituido por sociología exclusivamente, sin embargo, la base de datos no lo permite.
+
+De este modo, la búsqueda llevada a cabo se ha formulado con la siguiente sintaxis:
+
+TITLE-ABS-KEY ( shame )  AND  ( LIMIT-TO ( SUBJAREA ,  'SOCI' ) ) 
+
+```{r, echo=FALSE, include=F, message=FALSE}
+library('bibliometrix')
+library('readr')
+library('tidyverse')
+library('tibble')
+library('ggplot2')
+
+load('data/Mscopus.RData')
+results <- biblioAnalysis(Mscopus, sep = ';')
+Sscopus <- summary(results, 10, F)
+```
+
+Se han extraído todos aquellos manuscritos que contenían la palabra 'vergüenza',
+combinada con los criterios de estar incluidos en 'ciencias sociales' para todas
+las colecciones, por lo que se trata de un universo de datos, en vez de una muestra.
+En este sentido, es importante tener esto en cuenta ya que no es preciso llevar a cabo ningún tipo
+de inferencia estadística, puesto que los resultados observados son los de
+la población del periodo estudiado.
+
+Así pues, disponemos de un total de 3757 documentos escritos por un total de 6173 autores, lo que deja
+intuir que la correspondencia por autor será de más de un documento, es decir, habrá un conjunto
+de autores principales que se encargan de escribir sobre esta temática. Esto se corrobora cuando se ve
+que hay 1845 autores que han publicado documentos por sí solos, al mismo tiempo que hay 2143 artículos
+firmados por un solo autor ^[Los apartados expresados dentro de la tabla se encuentran en inglés
+por definición y no se encuentra disponible ningún procedimiento sencillo de modificar esta 
+salida, por lo que no se ha traducido].
+
+```{r, echo=FALSE, eval=TRUE, fig.cap= "Tabla resumen de los resultados de bibliometría"}
+infor.principal <- knitr::kable(Sscopus$MainInformationDF); infor.principal
+```
+
+A lo largo del periodo estudiado, entre 1852 y 2019, la producción científica aumenta.
+Se puede ver que hasta mediados de los años 80 apenas había un solo artículo por año. Sin embargo,
+a partir de los años 90 la producción científica sobre la emoción de la vergüenza en sociología
+aumenta cada vez más, llegando a tener más de 300 artículos en el año 2018.
+
+
+```{r echo=FALSE, eval=TRUE, fig.cap="Aumento de la producción científica temática"}
+plot(
+  Sscopus$AnnualProduction,
+  10,
+  pause = F,
+  main = 'Producción científica por años',
+  ylab = 'Artículos',
+  xlab = 'Años'
+  )
+```
+
+Si consideramos las primeras 15 potencias mundiales dentro del estudio de la vergüenza por su producción, nos encontramos
+con que España queda fuera, estando la mayoría de estas potencias por debajo de los 200 artículos, con la excepción de UK
+y, sobre todo, EEUU con más de 1000 artículos.
+
+
+```{r message=FALSE, echo=FALSE, fig.cap="Principales productores"}
+barplot(
+  results$Countries[c(1:15)],
+  horiz = T,
+  las = 1,
+  main = 'Países y producción por número de artículos',
+  col = 'turquoise' )
+```
+
+Para conocer la realidad de los estudios de la vergüenza, se han considerado las palabras incluidas en los
+títulos como unidades elementales que pueden describir las temáticas con las que los autores la han relacionado.
+En este sentido, se han extraído las 30 palabras principales que se presentan en el conjunto de los títulos de los artículos,
+y se han eliminado las palabras repetidas para que cada una apareciese una sola vez ^[Nota: aquellas palabras
+que representan lo mismo, pero que están escritas de diferentes formas aparecen repetidas, puesto que la
+técnica no las reconoce como semejantes. En el que caso de querer profundizar en este aspecto, sería necesario
+llevar a cabo una depuración de las palabras obtenidas.].
+
+Siguiendo este enfoque, se podría plantear estudiar las relaciones en función de algún indicador estadístico,
+en vez de tratar únicamente con las frecuencias de coincidencia. De este modo, a continuación, exponemos un gráfico
+en el que se muestran las relaciones entre los términos por fuerza de asociación y divididos en conglomerados, sin olvidar
+que todas están relacionadas entre sí.
+
+Se observa claramente la diferenciación en 4 conglomerados, aunque dos de ellos se establecen por la relación entre dos
+términos: el primero de ellos, se da entre ética y afecto y, el segundo, entre objetivación del self y la imagen del cuerpo.
+Los conglomerados restantes tienen conjuntos de términos destacablemente numerosos en comparación. Entre ellos encontramos
+el conglomerado rojo, formado por el miedo, trauma, vuilencia, culpa, ansiedad, identidad, orgullo, vergüenza, cultura y
+emociones morales, entre otros, y el conglomerado azul reune a la familia, el estigma, la pobreza, la violencia doméstica,
+la sexualidad, a la mujer y la salud mental.
+
+Resulta de gran interés que estos 30 términos principales asociados entre sí se agrupan de una forma que resulta
+claramente interpretable desde la teoría sociológica, así como desde la relación con otras emociones y asociaciones
+a colectivos concretos. Asimismo, en su mayoría se trata de una terminología inclinada hacia la negatividad de la
+realidad social, todo aquello que se trata de ocultar.
+
+```{r, include=F, echo=FALSE}
+options(width = 100) # Para quÃ©?
+S <- summary(object = results, k = 10, pause = FALSE)
+NetMatrix <-
+biblioNetwork(Mscopus,
+analysis = 'co-occurrences',
+network = 'author_keywords',
+sep = ';')
+S <- normalizeSimilarity(NetMatrix, type = 'association')
+```
+
+```{r, echo=FALSE, fig.cap="Relaciones entre los términos"}
+net <-
+  networkPlot(
+  S,
+  n = 30,
+  Title = 'Red de co-ocurrencias de términos',
+  type = 'fruchterman',
+  labelsize = 0.7,
+  halo = FALSE,
+  cluster = 'walktrap',
+  remove.isolates = FALSE,
+  remove.multiple = FALSE,
+  noloops = TRUE,
+  weighted = TRUE)
+```
+
+### Utilidades para el estudio de las emociones
+
+Desde la sociología sociología de las emociones, tanto como desde la sociología
+en general, resulta de gran relevancia conocer a la comunidad científica que
+produce el conocimiento, como las temáticas que se tratan. Las metodologías
+de los estudios documentales para la preparación de teoría o marcos teóricos
+para posteriores aplicaciones o creaciones de herramientas pueden resultar
+demasiado costosas para los recursos de tiempo y de fuerza intelectual 
+disponible para la resolución de problemas o desarrollo de proyectos.
+
+En este apartado, hablando de la emoción de la vergüenza como un caso de
+emoción no considerada en la mayoría de las técnicas de análisis de 
+sentimientos ^[Por ahora, la única forma de tratamiento de la vergüenza
+ha sido identificada en algunos diccionarios desarrollados para inglés,
+que incluyen algunos términos a partir de los que se puede decir que se
+está expresando vergüenza. Pero no hay ninguna fundamentación teórica,
+ni estadística a la hora de entender qué representa esa vergüenza: 
+quien lo dice, ¿siente vergüenza?, ¿avergüenza a otro? ,¿rechaza una
+norma social?, etc. ¿Es timidez o humillación?, ¿de qué grado se trata?],
+se puede estudiar con la minería de texto incluso en un sentido temático
+o bien con la ayuda de técnicas bibliométricas con el fin de ser
+capaces de reunir una teoría fragmentada como la que existe.
+
+En este sentido, una forma de ser capaces de *estudiar* las emociones
+y ser capaces de *aportar* mejoras al análisis de sentimientos o a
+la ciencia en general, se encuentra también en el propio uso de
+herramientas como la minería de texto, tanto por su cuenta como 
+incluida dentro de análisis bibliométricos.

@@ -1,0 +1,121 @@
+
+# BIBLIOGRAFÍA {-}
+
+Almashraee, M., Monett, D., Paschke, A. (2016). Emotion Level Sentiment Analysis: 
+The Affective Opinion Evaluation Emotion Level Sentiment Analysis: The Affective Opinion Evaluation, (May).
+
+Basile, P., Basile, V., Nissim, M., Novielli, N., Patti, V. (2017). 
+Sentiment Analysis of Microblogging Data Sentiment Analysis of Microblogging Data, 
+(January). https://doi.org/10.1007/978-1-4614-7163-9.
+
+Bericat, E. (2000). La sociología de la emoción y la emoción en sociología. Papers, 62, 145-176.
+
+Bericat, E. (2016): Problemas sociales, estructuras afectivas y bienestar emocional (La Catarata).
+
+Betancourt, G. A. (2005). Las máquinas de soporte vectorial (SVMs). Scientia et technica, 1(27).
+
+Castellanos, V., Gómez Yáñez , J. A., y Moraño , X. (2019) Innovación metodológica: R
+etos de la investigación social en un mundo digital. XIII Congreso Nacional de Sociología.
+
+Coulon, A. (2005), La etnometodología. Madrid: Cátedra.
+
+D'Errico, F., Poggi, I. (2017). Social Emotions. 
+A Challenge for Sentiment Analysis and User Models. Emotions and Personality in Personalized Services.
+
+Faen Scopus, (2015), Funcionalidades avanzadas en Scopus, Elsevier.
+
+Fernández Casal, R. (2017), Creación de sitios web con `blogdown`. 
+https://rubenfcasal.github.io/post/creaci%C3%B3n-de-sitios-web-con-blogdown/.
+
+Hovy, E. H. (2015). What are Sentiment , Affect and Emotion? 
+Applying the Methodology of Michael Zock to Sentiment Analysis, 13–25.
+https://doi.org/10.1007/978-3-319-08043-7.
+
+Kiritchenko, S., Zhu, X., Cherry, C., Mohammad, S. M., Kiritchenko, 
+S., Zhu, X., … Mohammad, S. (2014). NRC-Canada-2014: D
+etecting Aspects and Sentiment in Customer Reviews, (SemEval), 437–442.
+
+Liu, B. (2012). Sentiment Sentiment Analysis Analysis and and Opinion Opinion Mining Mining.
+
+Liu, B. (2015). Sentiment analysis. Mining opinions, Sentiments and Emotions. Illinois, 
+Chicago: Cambridge, University Press.
+
+Miranda, C. H., & Guzmán, J. (2017). A Review of Sentiment Analysis in Spanish, 12(22).
+
+Mur,R. A., Aprendizaje Automático para el Análisis de Datos, Madrid.
+
+Molina-González MD, Martínez-Cámara E, Valdivia M, Teresa M(2015) Crisol: B
+ase de conocimiento de opiniones para el espanol. Sociedad Española para el Procesamiento del Lenguaje Natural.
+
+Oliden, P. E. (2009). ¿ Existe vida más allá del SPSS? Descubre R. Psicothema, 21(4), 652-655.
+
+Pak, A., Paroubek, P. (2008). Twitter as a Corpus for Sentiment Analysis and Opinion Mining, 1320–1326.
+
+Pang, B., Lee, L. (2008). Opinion Mining and Sentiment Analysis, 2, 1–135. https://doi.org/10.1561/1500000001.
+
+Paradis, E., Ahumada, J. A. (2003). R para Principiantes.
+
+Picard, R. W. (1995). Affective Computing. M.I.T Media Laboratory 
+Perceptual Computing Section Technical Report, 321, 1–16.
+
+Plaza-del-Arco, M. D. M.-G., Jiménez-Zafra, M. T. M.-V. (2018). Lexicon adaptation for spanish emotion mining.
+
+Rosas M. V., Errecalde M. L., Rosso P. (2010) Un framework de Ingeniería del Lenguaje para
+el Pre-procesado Semántico de Textos. XVI Congreso Argentino de Ciencias de la Computación.
+
+Shevchenko, A. (2017), Vergüenza como institución social. Trabajo de Fin de Grado, Universidad de A Coruña
+
+Sidorov, G. (2014). Creación y evaluación de un diccionario marcado con emociones y ponderado para el español, (Cic). https://doi.org/10.7764/onomazein.29.5
+
+Yihui, X. (2018), R Markdoen: The Definitive Guide. https://bookdown.org/yihui/rmarkdown/
+
+
+## Repositorios{-}
+
+https://www.r-pkg.org/
+
+https://cran.r-project.org/web/packages/
+
+https://cran.r-project.org/manuals.html
+
+## Paquetes {-}
+
+Allaire JJ, Cheng J, Xie Y, McPherson J, Chang W, Allen J, Wickham H, Atkins A, Hyndman R, Arslan R (2017) rmarkdown: Dynamic Documents for R. R package version 1.11.
+
+Aria, M. & Cuccurullo, C. (2017) bibliometrix: An R-tool for comprehensive science mapping analysis, Journal of Informetrics, 11(4), pp 959-975, Elsevier.
+
+Duncan Temple Lang and the CRAN Team (2019). XML: Tools for Parsing and Generating XML Within R and S-Plus. R package version 3.98-1.20. 
+
+Erich Neuwirth (2014). RColorBrewer: ColorBrewer Palettes. R package version 1.1-2.
+
+Feinerer I, Hornik K (2017) tm: Text Mining Package. R package version 0.7-5. 
+
+Feinerer I, Hornik K, Meyer D (2008) Text mining infrastructure in R. Journal of Statistical Software, 25(5): 1-54, ISSN 1548-7660. http://www.jstatsoft.org/v25/i05. 
+
+Frank E Harrell Jr, with contributions from Charles Dupont and many others. (2019). Hmisc: Harrell Miscellaneous. R package version 4.2-0. 
+
+H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
+
+Hadley Wickham (2017). tidyverse: Easily Install and Load the 'Tidyverse'. R package version 1.2.1. https://CRAN.R-project.org/package=tidyverse.
+
+Hadley Wickham, Jim Hester and Jeroen Ooms (2019). xml2: Parse XML. R package version 1.2.1.
+
+Hadley Wickham, Jim Hester and Romain Francois (2018). readr: Read Rectangular Text Data. R package version 1.3.1.
+
+Kirill Müller and Hadley Wickham (2019). tibble: Simple Data Frames. R package version 2.1.3.
+
+Milan Bouchet-Valat (2019). SnowballC: Snowball Stemmers Based on the C 'libstemmer' UTF-8 Library. R package version 0.6.0. 
+
+R Core Team (2019). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria.
+
+Rinker T (2013). qdap: Quantitative discourse analysis package [Computer software manual]. Buffalo, NY: Retrieved from http://github.com/trinker/qdap ((Computer Software, Version 2.2.5))
+
+Stefan Milton Bache and Hadley Wickham (2014). magrittr: A Forward-Pipe Operator for R. R package version 1.5. 
+
+Terry Therneau and Beth Atkinson (2019). rpart: Recursive Partitioning and Regression Trees. R package version 4.1-15. 
+
+Wickham H, François R, Henry L, Müller K (2018) dplyr: A Grammar of Data Manipulation. R package version 0.7.6. 
+
+Williams, G. J. (2011), Data Mining with Rattle and R: The Art of Excavating Data for Knowledge Discovery, Use R!, Springer.
+
+Yihui Xie (2016). bookdown: Authoring Books and Technical Documents with R Markdown. Chapman and Hall/CRC. ISBN 978-1138700109

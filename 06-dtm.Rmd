@@ -1,0 +1,130 @@
+# CREACIÓN DE LA MATRIZ DE TÉRMINOS
+
+```{r , child = '_global_options.Rmd'}
+```
+
+Para poder llevar a cabo un análisis exploratorio de los datos, es necesario
+trasladarlos a una naturaleza que sea procesable con métodos estadísticos.
+En este sentido, las palabras como tal no pueden ser tratadas cuantitativamente,
+pero se puede crear una base de datos que contenga la frecuencia de su aparición
+en relación a los demás términos.
+
+La función `DocumentTermMatrix` de la librería `tm` sirve para generar
+una variable (columnas) para cada término/palabra que aparece en los
+textos, que contiene la frecuencia de aparición en cada
+documento (filas).
+
+Como es una función del paquete `tm`, se aplica a los corpus procesados número 3,
+tanto de la variable `sumario` como de `texto`. Además, si aplicamos la
+función `inspect` a estos objetos, podemos ver la cantidad de términos
+que se está considerando o, dicho de otra forma, la cantidad de variables
+que se han extraído.
+ 
+Así, en este caso, para la variable `sumario` se han extraído en total
+13808 términos, llegando a haber palabras de longitud de caracteres
+23, lo cual parece sugerir alguna clase de error. Para el caso de la
+variable `texto`, la cantidad de términos ha sido de 81756 y la 
+longitud de término máxima 53 caracteres.
+
+```{r }
+dtm_sumario <- DocumentTermMatrix(corpus_sumario3) 
+dtm_texto <- DocumentTermMatrix(corpus_texto3) # Dtm de 'texto' procesado
+```
+
+## Reducción de dimensiones
+
+Al tratar con cada palabra en cada comentario, a pesar de que los datos
+estén depurados, se crea un número alto de variables. Estas variables,
+a su vez, en su inmensa mayoría contendrán el valor '0' como resultado.
+Esto es, la mayor parte de los términos no aparecerán en la mayor parte
+de los comentarios.
+
+Por lo tanto, el interés a la hora de conformar estos datos reside en 
+reducir al máximo posible, manteniendo la mayor parte de la información,
+el volumen de datos y evitar posibles errores, como pueden ser palabras
+de más de 15 o 20 caracteres o semajantes.
+
+Para paliar con este volumen de datos, vamos a tratar principalmente 
+con dos procedimientos:
+
+* El establecimiento de la longitud mínima y máxima de las palabras
+* Eliminación de las palabras menos frecuentes
+
+En primer lugar, se establece como límite inferior la cantidad de
+2 caracteres y como límite superior 15 para las dos variables a partir
+de las cuales se han creado las matrices de términos. Al guardarse
+el 'dtm_sumario2' como nuevo objeto, las palabras que no cumplen con esta
+condición no se incluyen dentro de su matriz.
+
+Se puede ver que hubo cierta reducción, siendo esta mayor en la variable
+`texto` (79077 de 81756), ya que era la que tenía palabras de 
+marcada longitud, frente a la variable sumario (13774 de 13808).
+La reducción en ambos casos ha sido moderada, lo que indica que los 
+términos excesivamente cortos o largos se daban en muy pocos casos.
+
+```{r }
+dtm_sumario2 <- DocumentTermMatrix(corpus_sumario3, 
+                                   list(wordLengths = c(2,15)))
+
+dtm_texto2 <- DocumentTermMatrix(corpus_texto3,
+                                 list(wordLengths = c(2,15)))
+```
+
+El segundo procedimiento está enfocado hacia lo que se denomina `sparsity` o
+la dispersión de los términos del documento. Esta dispersión va de 0, ninguna
+dispersión, a 1, toda la dispersión posible. Esto significa que la matriz
+creada original tiene una `sparsity` de 1, ya que conserva todos los términos
+originales como variables, sean estos o no mínimamente frecuentes.
+
+Para reducir ligeramente el volumen de datos, puesto que una limitación en 
+este aspecto resulta notoria, establecemos un 0,99 o 99% de dispersión como
+valor a partir del cual las palabras muy poco frecuentes en menos de 1%
+de los documentos sean eliminadas
+de la matriz de términos. Esto es, se permite como máximo una `sparsity` de
+0,99.
+
+Las nuevas matrices de términos, habiendo eliminado las palabras menos
+frecuentes, se han reducido significativamente, lo que se puede observar
+a partir de los resultados de `inspect`: han permanecido 186 términos para
+la variable `sumario` y 3448 para la variable `texto`.
+
+```{r }
+dtm_sumario3 <- removeSparseTerms(dtm_sumario2, 0.99)
+inspect(dtm_sumario3)
+
+dtm_texto3 <- removeSparseTerms(dtm_texto2, 0.99)
+inspect(dtm_texto3)
+```
+
+## Conversión de la matriz DTM a data frame
+
+A pesar del correcto funcionamiento del paquete `tm` y de
+sus utilidades, existen tanto problemas de compatibilidad de sus
+formatos con otros paquetes, así como de tiempo de computación. Por
+lo tanto, si se quieren emplear otras herramientas no implementadas
+en el paquete `tm` será necesario convertir los datos al 
+formato estándar de `R` (`data.frame`).
+
+En este sentido, resulta preciso en todo caso y cuanto antes, extraer
+los datos procesados y convertirlos a un formato fácilmente accesible
+desde R, sin que se tenga que llevar a cabo este preprocesamiento 
+innumerables veces, siempre que queramos hacer pruebas o modificar 
+aspectos determinados.
+
+En este caso, para crear la matriz de términos era necesario recurrir a
+la formulación de la base de datos como `corpus` y para evitar este
+procedimiento, los datos se transforman en un data frame.
+
+```{r, eval=FALSE }
+df_dtm_sum <- data.frame(as.matrix(dtm_sumario3))
+df_dtm_text <- data.frame(as.matrix(dtm_texto3))
+```
+
+Finalmente, se guardan estas matrices en un archivo externo de formato 
+'RData' en el directorio establecido y, siempre que sea posible, se 
+trabajará con estos datos ya conformados.
+
+```{r, eval=FALSE }
+save(df_dtm_sum, file = 'df_dtm_sum.RData') # DTM sumario
+save(df_dtm_text, file = 'df_dtm_text.RData') # DTM texto
+```

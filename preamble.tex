@@ -1,0 +1,36 @@
+\usepackage{booktabs}
+\usepackage{amsthm}
+\usepackage{emptypage}
+\pagestyle{plain}
+\pagenumbering{gobble}
+\usepackage{fancyhdr}
+
+\ifxetex
+  \usepackage{polyglossia}
+  \setmainlanguage{spanish}
+  % Tabla en lugar de cuadro
+  \gappto\captionsspanish{\renewcommand{\tablename}{Tabla}
+          \renewcommand{\listtablename}{Índice de tablas}}
+
+\else
+  \usepackage[spanish,es-tabla]{babel}
+\fi
+\makeatletter
+\def\thm@space@setup{%
+  \thm@preskip=8pt plus 2pt minus 4pt
+  \thm@postskip=\thm@preskip
+}
+\makeatother
+
+% fontsize: 11 pt
+% linestretch: 1.4
+% link-citations: yes
+% secnumdepth: 4
+% lof: False
+% lot: False
+% documentclass: book
+% classoption: openany
+% geometry: 'left=3.5cm, right=3cm, top=2.5cm, bottom=2.5cm'
+% - \AtBeginDocument{\renewcommand{\chaptername}{Capítulo}}
+% - \AtBeginDocument{\renewcommand{\contentsname}{Índice}}
+% compact.title: false

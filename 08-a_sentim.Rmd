@@ -1,0 +1,381 @@
+# ANÁLISIS DE SENTIMIENTOS CON `POLARITY`
+
+```{r , child = '_global_options.Rmd'}
+```
+
+El único procedimiento encontrado para la determinación de una puntuación *emocional*
+a partir de una técnica de análisis de sentimientos se encuentra en la función
+`polarity` del paquete `qdap`. Esta función se incluye en la parte de las 
+técnicas que tratan con datos no supervisados desde una perspectiva de
+análisis semántico.
+
+Este estimador de la `polaridad` emocional presentada en un determinado texto
+supone una ventaja más allá de la disponibilidad y transparencia de las
+fórmulas, y es que tiene en cuenta no solamente las palabras positivas
+y negativas para el recuento y el cálculo de la puntuación, sino también
+considera que la carga de las palabras se puede *invertir*, *disminuir* o
+*ampliar*.
+
+La atención hacia los *modificadores* de la carga presente en el lenguaje
+comienza a principios de los años 2000, cuando los investigadores 
+se dan cuenta de que la presencia de palabras negativas cerca de las
+palabras positivas modifican la carga positiva (Das y Chen, 2001; Pang,
+Lee y Vaithyanathan, 2002). En este sentido,se han tomado dos direcciones
+diferenciadas a la hora de tratar con esta cuestión:
+
+- Por un lado, se desarrolla una perspectiva que da una puntuación determinada
+a cada palabra que implique emoción positiva o negativa, habitualmente
+puntuadas como +1 y -1 respectivamente ^[Las puntuaciones pueden variar
+según la palabra.], y, cuando
+una palabra positiva aparece seguida de una negativa, su puntuación se invierte.
+Por ejemplo, si encontramos la frase "No me gusta el helado", clásicamente se
+consideraría que está presente la palabra "gusta" como positiva, por lo que 
+la puntuación sería +1. Sin embargo, a partir de 2004, Hu y Liu, considerarían
+que el "no" que precede a la palabra "gusta" invierte la carga y la frase se
+convierte en negativa.
+
+- El segundo enfoque, con investigadores como Polanyi y Zaenen (2006), optan
+por definir unas medidas concretas a partir de *cuánto* consideran que la
+expresión negativa afecta a la positiva. También consideraron que hay más
+factores que influyen en dirección de la polaridad, como es el caso de los
+*intensificadores*. Por ejemplo, no es lo mismo "me gusta el helado" que
+"me gusta mucho el helado". A partir de este enfoque se han desarrollado
+diferentes formas de puntuar la polaridad, muchas veces ampliando el 
+rango de los valores. En el caso de Taboada el al. (2011), el rango
+fue ampliado desde -5, totalmente negativo, hasta +5, totalmente positivo.
+
+## Formulación del cálculo
+
+Veamos, a continuación, lo que calcula la función `polarity`:
+
+- Primeramente, se detectan las palabras positivas y negativas a partir del
+diccionario que se haya aplicado.
+
+- Para cada palabra se determina un rango de palabras que pueden influir en 
+su puntuación o dirección de polaridad, por ejemplo, se pueden tomar 5 palabras
+a su alrededor hacia ambos sentidos. De esta forma se determina un cluster para cada término,
+denominado *grupo de contexto*.
+
+- A cada uno de los términos del grupo de contexto se le asigna una puntuación
+neutra, negadora o intensificadora, con el fin de poder entender cómo es la
+carga de la palabra influida por las demás. Se ha de decir que las palabras
+negadoras pueden invertir tanto la puntuación de una palabra positiva, como
+negativa.
+
+    Los términos del grupo de contexto se denotan de la siguiente forma:
+
+-   $\mathbf{X}_i = \left\{X_{ij} : j = 1, \ldots, n_i \right\}$ del grupo de contexto de la palabra $i$ (positiva o negativa)
+
+-   $A_i=\sum_{j=1}^{n_i} \mathbf{1}_A(X_{ij})$, número de palabras amplificadoras.
+
+-   $D_i=\sum_{j=1}^{n_i} \mathbf{1}_D(X_{ij})$, número de palabras disminuidoras.
+
+-   $N_i=\sum_{j=1}^{n_i} \mathbf{1}_N(X_{ij})$, número de palabras negadoras.
+
+    donde
+
+$\mathbf{1}_A$, $\mathbf{1}_D$ e $\mathbf{1}_N$ son las correspondientes funciones indicadoras
+(toman el valor 1, si el término pertenece
+a algún tipo de palabras anteriormente indicadas, o bien 0 si no pertenece).
+
+- Las palabras positivas y negativas se puntúan como +1 o -1, pudiendo modificarse
+esta puntuación.Por su lado, las palabras neutrales no afectan esta ecuación, aunque
+sí tienen un efecto sobre el recuento de palabras. Los intensificadores tienen unos
+pesos definidos en cuanto a lo que modifican la carga emocional.
+
+Se denota por $W_i$ el peso de la palabra polarizada $i$:
+
+$$
+  W_i=\left\{
+  \begin{array}{ll}
+  +1  & \text{si } i \text{ positiva} \\
+  -1 & \text{si } i \text{ negativa}
+  \end{array}
+  \right.
+$$
+
+    y se calculan los valores:
+
+  $$W_i^{neg}=N_i\ mod 2$$
+    $$Dism=max(-c \cdot(D_i+W_i^{neg}\cdot A_i), -1)$$
+    $$Amp=c \cdot A_i  \cdot (1-W_i^{neg})$$
+    donde $c$ es el peso de los intensificadores.
+
+-	A continuación, se obtiene un total de la polaridad para el cluster
+teniendo en cuenta el efecto de los modificadores.
+
+
+  $$ C_i=(1+(Dism+Amp)) \cdot W_i \cdot (-1)^{N_i} $$
+
+- Para saber la puntuación final de la cadena de texto, estas puntuaciones de los grupos
+de contexto son sumados y divididas por la raíz cuadrada
+del total de las palabras que la conforman:
+
+
+  $$ C= \frac{\sum\ C_i}{\sqrt n} $$
+
+En este sentido, la función `polarity` ofrece una mezcla de los dos enfoques
+en el sentido de que considera la inversión de los valores positivos cuando
+se encuentran precedidos de *negadores*, así como la influencia de los
+*amplificadores* y los *disminuidores*.
+
+## Preparación de los diccionarios
+
+Resulta necesario llevar a cabo una preparación de los diccionarios porque
+el paquete está diseñado para inglés, aunque ofrece la posibilidad de 
+elegir diccionarios diferentes. En este sentido, aprovechando este 
+punto, se puede importar un diccionario para otro idioma y la función
+será capaz de procesar el texto en función de este.
+
+Para el presente trabajo se utiliza el diccionario para español ofrecido por
+Molina-González et al. (2013), llamado iSOL ^[El diccionario se puede
+descargar en el siguiente enlace: http://timm.ujaen.es/recursos/isol/].
+Este diccionario reune 2509 palabras definidas como positivas y 5626 
+palabras negativas, puntuadas como +1 y -1 respectivamente.
+Este conjunto de términos se ha generado a partir de una traducción automática
+de un diccionario elaborado por Bing Liu ^[El diccionario original se puede
+encontrar en la siguiente página web: http://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html.],
+aunque revisado y ampliado.
+
+```{r}
+diccionario <- read.csv2('data/isol_completo.csv', header = T)
+head(diccionario)
+```
+
+Por otro lado, tener el diccionario de palabras positivas y negativas no cubre
+todas las necesidades que tenemos en la formulación aplicada porque carece
+de amplificadores, disminuidores y negadores, por lo que su determinación
+ha de ser propia. Así, se ha llevado a cabo una búsqueda en la Real 
+Academia Española con el fin de encontrar términos que se ajustasen a las
+necesidades del estudio.
+
+```{r echo=FALSE}
+# amplificadores  <- read.table('amplificadores.txt', stringsAsFactors = F)
+# diminuidores  <- read.table('diminuidores.txt', stringsAsFactors = F)
+# negadores <- read.table('negadores.txt', stringsAsFactors = F)
+
+amplificadores <- c('extremadamente', 'cierto','enorme','enormemente','extremo',
+  'muy','altamente','enormemente','inmensamente',' incalculable','incalculablemente',
+  'masivo','masivamente','mas','especialmente','particularmente','bastante',
+  'demasiado','demasiada','realmente','seriamente','significativamente',
+  'seguramente','verdaderamente','vasto','vastamente','gran','excesivos',
+  'excesivo','excesivamente','mucho','perfectamente','completamente','sumamente',
+  'extraordinariamente','increible','increiblemente','especialmente','extra',
+  'absoluto','absolutamente','muchisimo','totalmente','fuertemente','excepcionalmente',
+  'superior','mayor','obviamente','definitivamente','suficiente')
+
+negadores <- c('no', 'sin', 'nunca', 'jamas', 'tampoco', 'ni')
+
+diminuidores <- c('apenas', 'relativamente', 'debilmente', 'poco', 'poca', 
+                  'solamente', 'menos', 'casi', 'ridiculamente', 'inferior',
+                  'menor', 'dificilmente', 'nada')
+```
+
+Finalmente, se han creado tres listas: 50 amplificadores, 6 negadores y 
+13 diminuidores. Se ha de decir, por su lado, que no se trata de una
+determinación exhaustiva, ni de una definición teórica, más allá de las 
+pruebas de las posibilidades de las herramientas. Por lo tanto, no se
+trata de afirmar que estas palabras sean exclusivas ni únicas de 
+utilidad en este contexto.
+
+```{r}
+# Visualizamos 10 términos dentro de cada categoría
+amplificadores[1:10]
+negadores[1:6]
+diminuidores[1:10]
+```
+
+## Aplicación  de 'polarity'
+
+En primer lugar, cargamos el archivo de datos creado a partir del 
+preprocesamiento y cargamos la librería (o paquete) necesario.
+
+```{r message=FALSE, warning=FALSE}
+load('data/df_procesado.RData')
+library(qdap) # Contiene 'polarity'
+```
+
+```{r echo=FALSE}
+df_polarity  <- df_procesado
+```
+
+
+En primer lugar, al aplicar esta función a una variable de texto
+directamente, nos damos cuenta de que calcula un único valor para
+todo el conjunto. Esto no resulta conveniente pues lo que nos 
+interesa conocer es la puntuación de polaridad de cada una de las 
+críticas de cine.
+
+Por este motivo, para que se calcule la polaridad para cada valor
+o conjunto de texto dentro de la variable, es necesario desarrollar
+una función que, en forma de bucle, lo aplique en cada caso.
+Así pues, creamos un objeto vacío que va a contener la información 
+resultante y aplicamos la función `polarity` dentro de otra función
+creada con la ayuda del bucle `for`.
+
+Como se puede observar, siempre que aplicamos esta función, indicamos
+cuáles son los objetos en los que se encuentran todos los diccionarios
+que son necesarios para su ejecución.
+
+```{r, message=FALSE, warning=FALSE }
+res_polaridad_sumario <- c() # Objeto vacío
+
+for (i in 1:length(df_polarity$new_sumario)){
+  res_polaridad_sumario[i] <- polarity(
+    df_polarity$new_sumario[i],
+    polarity.frame = diccionario,
+    negators = negadores,
+    amplifiers = amplificadores,
+    deamplifiers = diminuidores)} 
+```
+
+En cambio, esto no es suficiente para obtener el resultado de la polaridad
+como tal porque la función nos devuelve varias salidas para cada elemento.
+Si se quiere procesar posteriormente o simplemente obtener las puntuaciones
+por separado, lo que simplifica la variable resultante, es necesario
+crear otro bucle para su extracción.
+
+```{r, message=FALSE, warning=FALSE }
+  # Visualizamos el resultado para el primer texto
+res_polaridad_sumario[[1]]
+
+pol_sumario<- c() # Objeto vacío
+
+for (i in 1:length(res_polaridad_sumario)){
+  pol_sumario[i] <- res_polaridad_sumario[[i]]$polarity}
+```
+
+Para comprobar que la variable se ha extraído correctamente, podemos
+recurrir a la función `str`, ya que ofrece un resumen de sus distintas
+características.
+
+```{r}
+str(pol_sumario); length(pol_sumario)
+```
+
+Ahora bien, aplicamos el procedimiento del mismo modo a la variable
+`new_texto` y observamos el resultado que se obtiene con la
+identificación de las palabras positivas y negativas, así como
+la puntuación de polaridad.
+
+```{r Chunk1, message=FALSE, warning=FALSE}
+# Calculamos las puntuaciones para cada caso
+res_polaridad_texto <- c() # Objeto vacío
+
+for (i in 1:length(df_polarity$new_texto)){
+  res_polaridad_texto[i] <- polarity(
+    df_polarity$new_texto[i],
+    polarity.frame = diccionario,
+    negators = negadores,
+    amplifiers = amplificadores,
+    deamplifiers = diminuidores)}
+
+#Creamos una función que guarde las puntuaciones de polaridad
+pol_texto <- c() # Objeto vacío
+
+for (i in 1:length(res_polaridad_texto)){
+  pol_texto[i] <- res_polaridad_texto[[i]]$polarity}
+
+# Comprobamos la correcta creación
+str(pol_texto); length(pol_texto)
+```
+
+A continuación, vamos a ver el resultado obtenido a partir de la
+aplicación de `polarity`en un elemento concreto dentro de la variable
+`new_texto`. Así, se puede ver que obtenemos un `data.frame` o un
+conjunto de variables en el mismo objeto, dentro del cual se da el
+resultado de 6 variables concretas:
+
+- La primera variable es la selección que se lleva a cabo dentro del
+texto, dentro de la cual se establece la opción de `todo el contenido`,
+por lo que la salida indica `chr "all"` o bien "todos los contenidos
+de tipo caracter".
+- En segundo lugar se indica la cantidad total de palabras, que, en 
+este caso, es de 266 `wc`.
+- La tercera variable `polarity` es de caracter numérico `num` y 
+contiene la puntuación de polaridad asignada al mensaje.
+- La cuarta variable es una lista de tipo `chr` o caracteres, que
+incluye las palabras positivas identificadas.
+- La quinta variable es una lista `chr`que contiene las palabras
+negativas identificadas.
+- Por último, la sexta variable es el texto que se ha analizado.
+
+```{r}
+str(res_polaridad_texto[[1]], width = 70, strict.width = 'wrap')
+```
+
+Finalmente, podemos ver la distribución de las polaridades que se 
+ha obtenido para las dos variables de texto. Se ha de indicar que la
+función `polarity` permite fijar el rango de la polaridad entre +1 y -1,
+en cambio, con el fin de observar cuál sería la complejidad encontrada,
+este parámetro no se ha fijado.
+
+Así, podemos ver en la distribución de frecuencias de la variable `texto`
+que la mayor concentración de los casos, como es lógico, se sitúa
+alrededor de 0 y, aparentemente, teniendo en cuenta las puntuaciones a 
+partir de 0,5 hacia ambos lados de la distribución, predominan las
+puntuaciones positivas.
+
+```{r echo=FALSE, fig.cap= "Frecuencia absoluta de la polaridad de `texto`"}
+hist(
+  pol_texto,
+  main = 'Frecuencia de la polaridad de texto',
+  xlab = 'Puntuaciones',
+  ylab = "Frecuencia",
+  border = F)
+```
+
+En lo que se refiere a la variable sumario, se porduce el mismo efecto,
+siendo mayor la concentración para el caso de las valoraciones positivas.
+En cambio, se hace notorio el efecto de algunos casos que podrían ser 
+atípicamente negativos, puesto que hay algunas puntuaciones que llegar a ser
+-3.
+
+```{r echo=FALSE, fig.cap="Frecuencia absoluta de la polaridad de `sumario`"}
+hist(
+  pol_sumario,
+  main = 'Frecuencia de la polaridad de sumario',
+  xlab = 'Puntuaciones',
+  ylab = "Frecuencia",
+  border = F)
+```
+
+## Combinación de las bases de datos
+
+Por último, como siempre que se modifican o crean variables
+nuevas, llevamos a cabo la práctica de volver a combinar los
+datos de forma que la base de datos final esté constituida y
+la investigación sea totalmente replicable y posible de 
+continuar, sin tener que volver a pasar por el proceso descrito.
+
+```{r eval=FALSE}
+load('data/df_dtm_sum.RData') # Sumario
+
+df_tm_sum <- df_dtm_sum
+colnames(df_tm_sum)
+
+# Se añade como nueva variable la valoración de polaridad de 'new_sumario'
+# a la matriz de términos DTM de sumario
+df_tm_sum$pol_sumario2 <- pol_sumario
+head(df_tm_sum$pol_sumario2)
+
+# Se añade como nueva variable la valoración de polaridad de 'new_texto'
+# a la matriz de términos DTM
+load('data/df_dtm_text.RData') # Texto
+
+df_tm_text <- df_dtm_text
+df_tm_text$pol_texto2 <- pol_texto
+
+# Por último, a las dos bases de datos resultantes se ha de añadir la 'puntuación'
+# cada por cada usuario en su comentario con el fin de poder llevar a cabo
+# análisis posteriores
+puntuacion2 <- df_polarity$df.puntuacion
+
+# La puntuación para todas las variables es la misma, siempre que se
+# corresponda con el número de comentario
+df_tm_sum$puntuacion <- puntuacion2
+df_tm_text$puntuacion <- puntuacion2
+
+save(df_tm_sum, file = 'df_tm_sum_completo.RData')
+save(df_tm_text, file = 'df_tm_text_completo.RData')
+```

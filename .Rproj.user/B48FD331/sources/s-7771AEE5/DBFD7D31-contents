@@ -1,0 +1,25 @@
+--- 
+title: 'Enfoque interdisciplinar sobre el estudio cuantitativo de las emociones' 
+subtitle: 'Anastasiya Shevchenko'
+author: 
+- 'María del Carmen Rodríguez Rodríguez'
+- 'Rubén Fernández Casal'
+date: 'Septiembre de 2019'
+site: bookdown::bookdown_site
+output: bookdown::git.book
+                  pdf_book
+documentclass: book
+bibliography: [book.bib, packages2.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: Nastya-Shevchenko/book_tfm
+description: "Este libro es el TFM de Anastasiya Shevchenko para el Máster de Sociología Aplicada (udc)."
+
+---
+
+```{r include = FALSE}
+library(bookdown)
+options(width = 70) # Establecimiento del ancho
+knitr::opts_chunk$set(width = 70, cache = TRUE)
+
+```

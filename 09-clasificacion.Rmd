@@ -1,0 +1,509 @@
+
+# CLASIFICACIÓN
+
+Con el fin de mostrar algunos de los análisis en los que es posible
+aplicar la variable `polaridad`, se ofrece un ejemplo de técnicas
+de clasificación para datos de texto: *árboles de decisión* y 
+*bosques aleatorios*. ^[El código utilizado en el presente capítulo
+se encuentra en la carpeta de Dropbox del siguiente enlace:
+https://www.dropbox.com/sh/i0qm1ao7izxm69c/AADVgvyBmYI4jDDMgj8dh9Kla?dl=0].
+No se trata de una aplicación del análisis de sentimientos como
+tal, pero sirve para dar una idea de las múltiples formas de 
+aprovechar los datos de texto.
+
+Para llevar a cabo estos procedimientos, se parte de los datos recogidos
+y procesados en la `matriz de documentos términos` con la ayuda del
+paquete `tm`. La variable `puntuación` está recogida dos veces, en su
+estado original y, por otro lado, con una recodificación en
+dos categorías, cuando es mayor de 3 equivale a 1 y 0 en otro caso,
+para facilitar la conformación de los árboles de decisión y su 
+interpretación.
+
+En este capítulo se llevará a cabo un análisis de la variable `sumario`,
+sin estudiar la variable `texto` ^[No se van a tratar las variables
+originales, sino las extraídas a partir de las frecuencias con la
+`matriz de documentos término`.]. Esta decisión ha tenido que ser tomada
+debido al carácter ilustrativo del capítulo y, por otro lado, a la 
+carga computacional que supone su procesamiento.
+
+Ahora bien, si bien en todo el documento hemos hablado del análisis de datos no 
+supervisados, al incluir una variable respuesta pasamos a las 
+ténicas supervisadas de clasificación, puesto que es posible comprobar
+la bondad de ajuste del clasificador obtenido.
+
+La forma habitual de tratar los datos supervisados consiste en distribuir
+los casos recogidos en la base en una serie de subconjuntos. En este caso,
+se establecerán los grupos de entrenamiento o *training* (80%) y de prueba o
+*test* (20%), siendo el primero a partir del cual se ajusta la clasificación
+del segundo. Con este procedimiento se estima la precisión de las
+predicciones.
+
+## Árboles de decisión
+
+El árbol de decisión es una técnica que clasifica 
+los datos extrayendo particiones binarias de forma recursiva, es decir, cada
+bifurcación se basa en un único criterio determinado y, siguiendo
+el planteamiento aplicado en este apartado, tiene
+dos opciones a la hora de ser clasificadas, puesto que la *respuesta* 
+es dicotómica: película "buena" o película "mala".
+
+Principalmente, hay dos formas de visualizar los resultados: en forma
+de texto y como gráfico de árbol. Así, para el propósito ilustrativo
+de los resultados que se obtienen con este tipo de técnicas, nos
+centraremos exclusivamente en la expresión gráfica.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+library(rattle)
+library(magrittr) # Utilise %>% and %<>% pipeline operators.
+
+# Load an RData file containing R objects.
+
+crs$rdata.datasets <- load('data/df_tm_sum_completo2.RData')
+crs$dataset <- df_tm_sum
+
+crv$seed <- 42 
+set.seed(crv$seed)
+
+crs$nobs <- nrow(crs$dataset)
+
+crs$train <- sample(crs$nobs, 0.7*crs$nobs)
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  sample(0.15*crs$nobs) ->
+  crs$validate
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  setdiff(crs$validate) ->
+  crs$test
+
+# PARA EL arbol SIN CONSIDERAR POLARIDAD
+
+# Se han anotado las siguientes selecciones de variable.
+crs$input     <- c("aburrida", "acaba", "accion", "actores",
+                   "ademas", "amantes", "amor", "animacion", "año",
+                   "años", "aquellos", "aqui", "argumento", "asi",
+                   "aun", "aventuras", "bastante", "bien", "buen",
+                   "buena", "buenas", "cada", "calidad", "capaz",
+                   "casa", "casi", "cine", "cinta", "clasico",
+                   "comedia", "consigue", "cosa", "cosas", "creo",
+                   "cualquier", "cuenta", "da", "decir", "deja",
+                   "demasiado", "desarrollo", "despues", "dia",
+                   "dialogos", "direccion", "director", "divertida",
+                   "dos", "drama", "duda", "efectos", "entretenida",
+                   "entretenimiento", "escena", "escenas", "español",
+                   "especiales", "espectador", "estilo", "excelente",
+                   "falta", "film", "filme", "fin", "final", "forma",
+                   "genero", "gran", "grandes", "guion", "gusto",
+                   "haber", "hace", "hacen", "hacer", "hacia",
+                   "hara", "hecho", "historia", "historias", "hora",
+                   "horas", "humor", "igual", "incluso",
+                   "interesante", "ir", "llega", "llegar", "maestra",
+                   "mal", "mala", "manera", "mayor", "media",
+                   "medio", "mejor", "mejores", "menos", "merece",
+                   "metraje", "minutos", "misma", "mismo", "momento",
+                   "momentos", "muchas", "muestra", "mundo", "nadie",
+                   "negro", "ningun", "nueva", "nuevo", "nunca",
+                   "obra", "ofrece", "original", "pantalla",
+                   "parece", "parte", "pasado", "pasar", "peli",
+                   "pelicula", "peliculas", "pena", "peor",
+                   "personaje", "personajes", "pesar", "poder",
+                   "podria", "primer", "primera", "principio",
+                   "producto", "propuesta", "publico", "pues",
+                   "punto", "queda", "quizas", "rato", "realidad",
+                   "realmente", "recomendable", "resulta",
+                   "resultado", "ritmo", "sabe", "saga", "sensacion",
+                   "sentido", "serie", "siempre", "simple", "sino",
+                   "sociedad", "solo", "tal", "tampoco", "tan",
+                   "tener", "terror", "thriller", "tiempo",
+                   "tiempos", "tipo", "toda", "todas", "trabajo",
+                   "trama", "tras", "ultimos", "unas", "va", "veces",
+                   "verdad", "verla", "vez", "vida", "vista",
+                   "visto", "visual", "vuelve")
+
+crs$numeric   <- c("aburrida", "acaba", "accion", "actores",
+                   "ademas", "amantes", "amor", "animacion", "año",
+                   "años", "aquellos", "aqui", "argumento", "asi",
+                   "aun", "aventuras", "bastante", "bien", "buen",
+                   "buena", "buenas", "cada", "calidad", "capaz",
+                   "casa", "casi", "cine", "cinta", "clasico",
+                   "comedia", "consigue", "cosa", "cosas", "creo",
+                   "cualquier", "cuenta", "da", "decir", "deja",
+                   "demasiado", "desarrollo", "despues", "dia",
+                   "dialogos", "direccion", "director", "divertida",
+                   "dos", "drama", "duda", "efectos", "entretenida",
+                   "entretenimiento", "escena", "escenas", "español",
+                   "especiales", "espectador", "estilo", "excelente",
+                   "falta", "film", "filme", "fin", "final", "forma",
+                   "genero", "gran", "grandes", "guion", "gusto",
+                   "haber", "hace", "hacen", "hacer", "hacia",
+                   "hara", "hecho", "historia", "historias", "hora",
+                   "horas", "humor", "igual", "incluso",
+                   "interesante", "ir", "llega", "llegar", "maestra",
+                   "mal", "mala", "manera", "mayor", "media",
+                   "medio", "mejor", "mejores", "menos", "merece",
+                   "metraje", "minutos", "misma", "mismo", "momento",
+                   "momentos", "muchas", "muestra", "mundo", "nadie",
+                   "negro", "ningun", "nueva", "nuevo", "nunca",
+                   "obra", "ofrece", "original", "pantalla",
+                   "parece", "parte", "pasado", "pasar", "peli",
+                   "pelicula", "peliculas", "pena", "peor",
+                   "personaje", "personajes", "pesar", "poder",
+                   "podria", "primer", "primera", "principio",
+                   "producto", "propuesta", "publico", "pues",
+                   "punto", "queda", "quizas", "rato", "realidad",
+                   "realmente", "recomendable", "resulta",
+                   "resultado", "ritmo", "sabe", "saga", "sensacion",
+                   "sentido", "serie", "siempre", "simple", "sino",
+                   "sociedad", "solo", "tal", "tampoco", "tan",
+                   "tener", "terror", "thriller", "tiempo",
+                   "tiempos", "tipo", "toda", "todas", "trabajo",
+                   "trama", "tras", "ultimos", "unas", "va", "veces",
+                   "verdad", "verla", "vez", "vida", "vista",
+                   "visto", "visual", "vuelve")
+
+crs$categoric <- NULL
+
+crs$target    <- "niv_punt_sum"
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- c("pol_sumario2", "puntuacion")
+crs$weights   <- NULL
+
+#arboldecisión 
+
+# El paquete 'rpart' ofrece la función 'rpart'.
+
+library(rpart, quietly=TRUE)
+
+# Reajustar la semilla de número aleatorio para obtener los mismos resultados cada vez.
+
+set.seed(crv$seed)
+
+# Construir el modeloarboldecisión.
+
+crs$rpart <- rpart(niv_punt_sum ~ .,
+                   data=crs$dataset[crs$train, c(crs$input, crs$target)],
+                   method="class",
+                   parms=list(split="information"),
+                   control=rpart.control(usesurrogate=0, 
+                                         maxsurrogate=0),
+                   model=TRUE)
+
+# Generar una vista textual del modeloarboldecisión.
+print(crs$rpart)
+printcp(crs$rpart)
+cat("\n")
+```
+
+### Árbol de decisión sin `polarity`
+
+Cuando se entrena un árbol de decisión, este produciría clasificaciones
+hasta que no hubiese más cambios posibles. Sin embargo, en la práctica
+esto supone que una pérdida de tiempo y de eficiencia. Así, para que
+el árbol crezca únicamente con las clasificaciones más relevantes, 
+se emplea el criterio de *complejidad*. Cuando el criterio de complejidad
+es 0, el árbol crece al máximo, y se
+suele tener en cuenta un valor estándar, que es 0,001. 
+
+Así, a continuación, vemos que hay dos *nodos* que clasifican los documentos
+en dos categorías de opinión sobre la película en cuanto a su puntuación:
+0 significa que la película fue clasificada como "mala" y 1 que fue 
+clasificada como "buena", por ponerle etiquetas.
+
+Por lo tanto, el primer nodo parte de la palabra *obra*. Si un comentario
+tiene una puntuación de frecuencia de esta palabra menor que 1, habrá 
+puntuado que la película es "mala" con un 66% de probabilidad, quedando
+un 34% de probabilidad de haberla puntuado como "buena".
+
+Además, el segundo nodo indica que si un texto tiene una puntuación
+de *obra* por debajo de 1 y, a su vez, su puntuación de *mejores* 
+está por debajo de 1, habrá puntuado la película como "mala" con una
+probabilidad del 67%. Por otro lado, si tiene una puntuación de
+*mejores* mayor que 1, tiene una probabilidad del 66% de haberla
+considerado "buena".
+
+Si el comentario tiene más de 1 en *obra* ^[Es interesante que los
+resultados obtenidos en las correlaciones adquieren sentido
+en cuanto a que la palabra *obra* sea el clasificador más importante y
+este era el término que más correlacionado esta con la palabra
+*maestra*.], automáticamente
+pasará a a tener una probabilidad de haber calificado la película
+como "buena" con una probabilidad del 66%.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Árbol de decisión sin polaridad"}
+# We use the rpart.plot package.
+fancyRpartPlot(crs$rpart)
+```
+
+### Árbol de decisión con polarity`
+
+Si incluimos la variable `polaridad`, esta va a tomar el lugar del
+principal criterio clasificador. Así, si su valor es menor que 0,25,
+la puntuación de la película será "mala" con una probabilidad del
+72%. En cambio, si es superior a ese límite, otra vez la palabra que
+más determina es *obra*, cuyo valor si es mayor que 1, clasifica a
+la película como "buena" con una probabilidad del 72%.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+crs$input     <- c("aburrida", "acaba", "accion", "actores",
+                   "ademas", "amantes", "amor", "animacion", "año",
+                   "años", "aquellos", "aqui", "argumento", "asi",
+                   "aun", "aventuras", "bastante", "bien", "buen",
+                   "buena", "buenas", "cada", "calidad", "capaz",
+                   "casa", "casi", "cine", "cinta", "clasico",
+                   "comedia", "consigue", "cosa", "cosas", "creo",
+                   "cualquier", "cuenta", "da", "decir", "deja",
+                   "demasiado", "desarrollo", "despues", "dia",
+                   "dialogos", "direccion", "director", "divertida",
+                   "dos", "drama", "duda", "efectos", "entretenida",
+                   "entretenimiento", "escena", "escenas", "español",
+                   "especiales", "espectador", "estilo", "excelente",
+                   "falta", "film", "filme", "fin", "final", "forma",
+                   "genero", "gran", "grandes", "guion", "gusto",
+                   "haber", "hace", "hacen", "hacer", "hacia",
+                   "hara", "hecho", "historia", "historias", "hora",
+                   "horas", "humor", "igual", "incluso",
+                   "interesante", "ir", "llega", "llegar", "maestra",
+                   "mal", "mala", "manera", "mayor", "media",
+                   "medio", "mejor", "mejores", "menos", "merece",
+                   "metraje", "minutos", "misma", "mismo", "momento",
+                   "momentos", "muchas", "muestra", "mundo", "nadie",
+                   "negro", "ningun", "nueva", "nuevo", "nunca",
+                   "obra", "ofrece", "original", "pantalla",
+                   "parece", "parte", "pasado", "pasar", "peli",
+                   "pelicula", "peliculas", "pena", "peor",
+                   "personaje", "personajes", "pesar", "poder",
+                   "podria", "primer", "primera", "principio",
+                   "producto", "propuesta", "publico", "pues",
+                   "punto", "queda", "quizas", "rato", "realidad",
+                   "realmente", "recomendable", "resulta",
+                   "resultado", "ritmo", "sabe", "saga", "sensacion",
+                   "sentido", "serie", "siempre", "simple", "sino",
+                   "sociedad", "solo", "tal", "tampoco", "tan",
+                   "tener", "terror", "thriller", "tiempo",
+                   "tiempos", "tipo", "toda", "todas", "trabajo",
+                   "trama", "tras", "ultimos", "unas", "va", "veces",
+                   "verdad", "verla", "vez", "vida", "vista",
+                   "visto", "visual", "vuelve", "pol_sumario2")
+
+crs$numeric   <- c("aburrida", "acaba", "accion", "actores",
+                   "ademas", "amantes", "amor", "animacion", "año",
+                   "años", "aquellos", "aqui", "argumento", "asi",
+                   "aun", "aventuras", "bastante", "bien", "buen",
+                   "buena", "buenas", "cada", "calidad", "capaz",
+                   "casa", "casi", "cine", "cinta", "clasico",
+                   "comedia", "consigue", "cosa", "cosas", "creo",
+                   "cualquier", "cuenta", "da", "decir", "deja",
+                   "demasiado", "desarrollo", "despues", "dia",
+                   "dialogos", "direccion", "director", "divertida",
+                   "dos", "drama", "duda", "efectos", "entretenida",
+                   "entretenimiento", "escena", "escenas", "español",
+                   "especiales", "espectador", "estilo", "excelente",
+                   "falta", "film", "filme", "fin", "final", "forma",
+                   "genero", "gran", "grandes", "guion", "gusto",
+                   "haber", "hace", "hacen", "hacer", "hacia",
+                   "hara", "hecho", "historia", "historias", "hora",
+                   "horas", "humor", "igual", "incluso",
+                   "interesante", "ir", "llega", "llegar", "maestra",
+                   "mal", "mala", "manera", "mayor", "media",
+                   "medio", "mejor", "mejores", "menos", "merece",
+                   "metraje", "minutos", "misma", "mismo", "momento",
+                   "momentos", "muchas", "muestra", "mundo", "nadie",
+                   "negro", "ningun", "nueva", "nuevo", "nunca",
+                   "obra", "ofrece", "original", "pantalla",
+                   "parece", "parte", "pasado", "pasar", "peli",
+                   "pelicula", "peliculas", "pena", "peor",
+                   "personaje", "personajes", "pesar", "poder",
+                   "podria", "primer", "primera", "principio",
+                   "producto", "propuesta", "publico", "pues",
+                   "punto", "queda", "quizas", "rato", "realidad",
+                   "realmente", "recomendable", "resulta",
+                   "resultado", "ritmo", "sabe", "saga", "sensacion",
+                   "sentido", "serie", "siempre", "simple", "sino",
+                   "sociedad", "solo", "tal", "tampoco", "tan",
+                   "tener", "terror", "thriller", "tiempo",
+                   "tiempos", "tipo", "toda", "todas", "trabajo",
+                   "trama", "tras", "ultimos", "unas", "va", "veces",
+                   "verdad", "verla", "vez", "vida", "vista",
+                   "visto", "visual", "vuelve", "pol_sumario2")
+
+crs$categoric <- NULL
+
+crs$target    <- "niv_punt_sum"
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- "puntuacion"
+crs$weights   <- NULL
+
+#arboldecisión 
+
+# El paquete 'rpart' ofrece la función 'rpart'.
+
+library(rpart, quietly=TRUE)
+
+# Reajustar la semilla de número aleatorio para obtener los mismos resultados cada vez.
+
+set.seed(crv$seed)
+
+# Construir el modeloarboldecisión.
+
+crs$rpart <- rpart(niv_punt_sum ~ .,
+                   data=crs$dataset[crs$train, c(crs$input, crs$target)],
+                   method="class",
+                   parms=list(split="information"),
+                   control=rpart.control(usesurrogate=0, 
+                                         maxsurrogate=0),
+                   model=TRUE)
+
+# Generar una vista textual del modeloarboldecisión.
+
+print(crs$rpart)
+printcp(crs$rpart)
+cat("\n")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap= "Árbol de decisión con polaridad"}
+fancyRpartPlot(crs$rpart)
+```
+
+## Bosque aleatorio
+
+En cuanto al bosque aleatorio, se trata de un procedimiento que prueba 
+diferentes opciones posibles de los árboles, por lo que se constituye
+como si fuese su continuación. El procedimiento se hace con la ayuda
+de *bagging*, que es una selección aleatoria de casos con reemplazamiento.
+
+### Bosque aleatorio con `polarity`
+
+Se construyen 500 árboles con el valor por defecto y en el modelo
+fueron utilizados 13 clasificadores. Asimismo, como se puede ver,
+se muestra una matriz de confusión en cuanto a los aciertos que
+se han dado en cada categoría.
+
+De este modo, se puede ver que han sido considerablemente mejor
+clasificados aquellos casos que puntuaban la película como
+"mala": 1452 casos bien clasificados, frente a 313 mal
+clasificados, teniendo una tasa de error de 17,73%, mientras
+que aquellos casos que puntuaban la película como "buena",
+tuvieron una tasa de error del 64,38%.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Build a Bosque aleatorio model using the traditional approach.
+
+set.seed(crv$seed)
+
+crs$rf <- randomForest::randomForest(as.factor(niv_punt_sum) ~ .,
+                                     data=crs$dataset[crs$train, c(crs$input, crs$target)], 
+                                     ntree=500,
+                                     mtry=13,
+                                     importance=TRUE,
+                                     na.action=randomForest::na.roughfix,
+                                     replace=FALSE)
+
+# Generate textual output of the 'Bosque aleatorio' model.
+crs$rf
+```
+
+Además de esta información, se pueden ver las variables por su
+importancia en cuanto a la clasificación. En este caso, 
+vamos a mostrar únicamente las 6 primeras, dentro de las cuales
+están `polaridad`, *obra*, *buena*, *mejores*, *hacia* ^[Este
+término parece ser un ejemplo de aquellas stopwords que no
+están incluidas en la depuración automática y que no tiene
+significado de por sí, pero sí una alta frecuencia.] y *año*.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# The `pROC' package implements various AUC functions.
+
+# Calculate the Area Under the Curve (AUC).
+pROC::roc(crs$rf$y, as.numeric(crs$rf$predicted))
+
+# Calculate the AUC Confidence Interval.
+pROC::ci.auc(crs$rf$y, as.numeric(crs$rf$predicted))
+
+# Enumerar la importancia de las variables.
+rn <- round(randomForest::importance(crs$rf), 2)
+head(rn[order(rn[,3], decreasing=TRUE),])
+```
+
+<!-- Correspondiendo con lo que habíamos visto en la -->
+<!-- matriz de confusión de los resultados de la  -->
+<!-- clasificación, el gráfico de las tasas de error -->
+<!-- muestra que aquella categoría que ha sido bien -->
+<!-- clasificada es la de las películas "malas", correspondientes -->
+<!-- al valor 0. -->
+
+<!-- ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Errores de clasificación con polarity"} -->
+<!-- # Diagramar la tasa de error contra el número de arboles. -->
+<!-- plot(crs$rf, main="") -->
+<!-- legend("topright", c("OOB", "0", "1"), text.col=1:6, lty=1:3, col=1:3) -->
+<!-- title(main="Tasas de error") -->
+<!-- ``` -->
+
+
+
+### Bosque aleatorio sin `polarity`
+
+Si ignoramos la variable de polaridad, se emplea el mismo número de 
+clasificadores y la predicción de las pelíulas calificadas como
+"buenas" empeora, siendo 66,17% de error frente a un 64,38% anterior.
+
+Las variables más importantes adquieren cierta correspondencia con 
+los resultados que se obtenían en el árbol de decisión al no
+tener en cuenta la polaridad. Asimismo, las tasas de error 
+permanecen, como indicábamos, de forma semejante a las anteriores.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Build a Bosque aleatorio model using the traditional approach.
+
+set.seed(crv$seed)
+
+crs$rf <- randomForest::randomForest(as.factor(niv_punt_sum) ~ .,
+                                     data=crs$dataset[crs$train, c(crs$input, crs$target)], 
+                                     ntree=500,
+                                     mtry=13,
+                                     importance=TRUE,
+                                     na.action=randomForest::na.roughfix,
+                                     replace=FALSE)
+
+# Generate textual output of the 'Bosque aleatorio' model.
+crs$rf
+# The `pROC' package implements various AUC functions.
+# Calculate the Area Under the Curve (AUC).
+pROC::roc(crs$rf$y, as.numeric(crs$rf$predicted))
+
+# Calculate the AUC Confidence Interval.
+pROC::ci.auc(crs$rf$y, as.numeric(crs$rf$predicted))
+
+# Enumerar la importancia de las variables.
+rn <- round(randomForest::importance(crs$rf), 2)
+head(rn[order(rn[,3], decreasing=TRUE),])
+```
+
+
+<!-- ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap="Errores de clasificación sin polarity"} -->
+<!-- # Diagramar la tasa de error contra el número de árboles. -->
+<!-- plot(crs$rf, main="") -->
+<!-- legend("topright", c("OOB", "0", "1"), text.col=1:6, lty=1:3, col=1:3) -->
+<!-- title(main="Tasas de error") -->
+<!-- ``` -->
+
+## Balance de los resultados
+
+Los datos de texto pueden ser estudiados de forma cuantitativa de
+diversas formas, como hemos ido viendo. En cambio, el papel de
+la carga emocional, por así decirlo, que ofrece la función
+`polarity` no parece ser lo suficientemente significativa tal
+y como está formulada en el momento actual.
+
+Viendo los resultados, tanto de los árboles de decisión, como de
+los bosques aleatorios, los errores de la clasificación tienen
+pautas muy semejantes con y sin la polaridad. Aunque, bien es
+cierto, que sería interesante también llevar a cabo el mismo
+procedimiento para la variable `texto`. Esta contiene más información
+y puede establecer una mejor estimación, pero computacionalmente su
+procesamiento es dificultoso.

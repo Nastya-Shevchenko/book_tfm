@@ -1,0 +1,205 @@
+# INTRODUCCIÓN A LA PROBLEMÁTICA
+\pagenumbering{arabic}
+
+
+```{r , child = '_global_options.Rmd'}
+```
+
+
+`r citefig("unif")`
+
+Ver Figura \@ref(fig:unif)
+
+```{r unif, fig.cap='Ejemplo gráfico (Fuente: elaboración propia)'}
+hist(runif(10))
+```
+
+
+El desarrollo de la Sociología de las Emociones, así como de las ciencias, en general, tradicionalmente viene ligado a un
+cierto rechazo hacia las emociones y una exaltación de la razón como único motor legítimo de la acción humana que podría
+considerarse adecuado *CITA*. Sin embargo, hoy en día hay algunos científicos que tratan de desapegarse de esta
+premisa para abrir camino hacia una ciencia que tenga en cuenta las emociones como una parte inherente del ser:
+una ciencia 'con' emociones *CITA*.
+
+Al desprecio hacia las emociones como parte de la vida social presente en todas las esferas,
+se suma la problemática de la desconexión que existe entre los distintos ámbitos del saber *CITA*. Así, las
+temáticas de interés científico están llenas de sopalamientos y puntos de encuentro  que no se aprovechan debido
+a las dificultades que producen las diferencias metodológicas y, sobre todo, las conceptuales.
+
+Por ello, muchas aportaciones científicas en una misma dirección pasan desapercibidas al estar en mundos metodológica y
+epistemológicamente diferentes. R. W. Picard fue ignorado de este modo por los sociólogos, cuando en el año 1995,
+escribió su artículo sobre “la computación afectiva”, que influenció fuertemente el posterior desarrollo de científicos
+dedicados al análisis de las emociones, así como la posterior inteligencia artificial.
+
+En aquel artículo, el autor habla de la importancia de las emociones en la ciencia y la estigmatización a la que estas
+están sometidas por ser consideradas, *per se*, no científicas. Esta gran aportación se basa, a su vez, en perspectivas
+procedentes del ámbito de las neurociencias, teniendo como referentes a Damasio (1994) y, por el lado de la psicología
+clínica, a Lewis (1995).
+
+Siguiendo esta tendencia, el análisis cuantitativo de las emociones, se ha llevado a la práctica en los últimos
+años por parte de las grandes empresas en los últimos años, como Google, p
+ara conocer lo que opinan los consumidores de sus diferentes productos (Liu,
+2012). La información utilizada se extrae a partir de, principalmente, “reviews” publicados en páginas web, consolidando
+así varias cuestiones clave: el interés aplicado al mercado de este tipo de análisis y la toma de teorías de referencia
+alejadas de la sociología (Pang and Lee, 2008).
+
+Así, se ha desarrollado un cuerpo de análisis y un universo de significados alrededor de lo que son “los sentimientos”,
+cómo se clasifican y cómo han de ser analizados, de forma que el resultado final suele ser una atribución de “opiniones”
+a una escala “positivo-negativo” (Basile, Basile, Nissim, Novielli, & Patti, 2017).
+
+El presente documento presenta los resultados obtenidos a través de un proceso analítico inductivo, que nace a partir
+de la revisión de técnicas de análisis de sentimientos con R, pasa por la clarificación de las definiciones 
+de conceptos clave ofrecidas
+por los desarrolladores y pensadores de estas técnicas, como por ejemplo, el propio 'análisis de 
+sentimientos', para pasar a la puesta en marcha de la aplicación de algunas de las técnicas de este tipo de análisis
+existentes hoy en día para castellano.
+Resulta relevante la acotación lingüística debido al desarrollo casi exclusivo de las herramientas de minería 
+de texto y del estudio de las emociones, en concreto, para la lengua inglesa. El efecto de este fenómeno se
+manifiesta en una atomización de la literatura hispana sobre la problemática y en la adaptación de las herramientas
+necesarias, como son los recursos léxicos, a través de traducciones automáticas del inglés . ^[Un ejemplo
+de este tipo de léxico es AFINN, siendo una traducción automática de un diccionario inglés a múltiples
+idiomas. Una aproximación a su uso se puede encontrar en el siguiente enlace:
+https://rpubs.com/jboscomendoza/analisis_sentimientos_lexico_afinn]
+
+El propósito último consiste en llevar a cabo una reflexión acerca de la definición, la aplicación y el funcionamiento
+de las técnicas, así como las teorías de las emociones utilizadas como base (de las taxonomías, para plantear una serie de
+mejoras que contribuyan al desarrollo de la ciencia interdisciplinar de las emociones, así como al desarrollo de la
+sociología de las emociones y el análisis de sentimientos.
+
+En este sentido, no se trata de investigar las emociones, sino partir de una serie de instrumentos y tratar de entrar
+en un universo de significados que mayoritariamente no ha sido formulado por científicos sociales. Esto es, buscar un
+punto de encuentro entre sociólogo/as, estadístico/as e informático/as.^[En el presente trabajo se va a hablar
+únicamente del papel de las ciencias que se mezclan de forma abarcable para el estudio, por lo que
+no se hablará de la importancia de los lingüistas, a pesar de su crucial importancia. En este sentido,
+se trata de una acotación con fines de expresar únicamente aquellas esferas que se van a tratar específicamente.]
+
+## Objetivos
+
+La finalidad de este trabajo consiste en llevar a cabo una revisión de las técnicas de análisis cuantitativo
+de las emociones en castellano desde teoría sociológica de la metodología. Se tratará, por lo tanto, de 
+comprender sociológicamente la formulación y la aplicación de estas técnicas y se propondrá una serie de
+mejoras.
+
+Por lo tanto, el objetivo general se puede enunciar de la siguiente forma:
+
+* Revisar las técnicas de análisis cuantitativo de las emociones,'sentiment analysis', llevando a cabo
+pruebas sobre un conjunto de datos real y proponer una serie de mejoras.
+
+En cuanto a los objetivos específicos, se lleva a cabo una agrupación en tres dimensiones, atendiendo a la afinidad de la
+naturaleza temática de las tareas que se incluyen en cada una.  Así, se encuentran los objetivos de aproximación
+conceptual (teóricos), los objetivos empíricos y, por último, los objetivos aplicados a emociones concretas, en este
+caso, la emoción de la vergüenza.
+
+Los objetivos de aproximación conceptual tienen la finalidad de estudiar y presentar las definiciones que se han 
+dado a los diferentes términos del análisis de sentimientos por sus desarrolladores. Dentro de estos, encontramos
+los siguientes:
+
+  1. Presentar las definiciones de análisis de sentimientos y lenguaje de programación `R`.
+  2. Revisar las herramientas o paquetes disponibles en R para el análisis de sentimientos en castellano.
+
+Los objetivos empíricos consisten en llevar a cabo pruebas de las funciones desarrolladas por los 
+distintos paquetes de análisis de sentimientos para conocer su funcionamiento, así como las posibles deficiencias.
+Dentro de estos, encontramos los siguientes:  
+
+  5. Llevar a cabo pruebas de los paquetes disponibles, incluyendo:
+  
+      - Importación y lectura de los datos.
+      - Preprocesamiento.
+      - Conversión de datos de texto a variables numéricas con la `matriz de términos del documento`.
+      - Descripción de los datos.
+      - Formas de analizar, definir y detectar las emociones.
+
+Por último, los objetivos aplicados consisten en analizar el papel de las emociones concretas
+dentro del análisis de sentimientos. Concretamente, en este caso, revisando la
+presencia de la emoción de la vergüenza en las técnicas de detección de las emociones y
+tratando de proponer una serie de actuaciones que pueden suponer un avance para
+el estudio de la esfera emocional en los datos de texto, de forma general. Por lo tanto, entre
+estos objetivos específicos se inscriben:
+
+  6. Estudiar la presencia de la emoción de la vergüenza en las técnicas de análisis de sentimientos.
+  7. Desarrollar una propuesta de mejora del análisis de las emociones de los datos de texto.
+
+## Aplicaciones
+
+El análisis de sentimientos, como veremos con más detenimiento en los capítulos posteriores, pertenece
+a la esfera de la minería de texto, que, a su vez, se inscrible dentro del marco del procesamiento de lenguaje
+natural (Natural Language Processing, NLP). Así, se puede considerar como una herramienta que puede estar 
+presente en todos los procesamientos de texto, si es considerada por los investigadores a la hora de la aplicación.
+
+En este sentido, las principales aplicaciones de la minería de texto, según Rosas, Errecalde y Rosso (2010),
+son las siguientes:
+
+- La extracción de información relevante de los datos de texto.
+- La gestión de grandes volúmenes de información con técnicas de clasificación, resumen...
+- La gestión del conocimiento, puesto que permite detectar rápidamente las claves de la información contenida.
+- La aplicación del análisis de sentimientos.
+
+Por lo tanto, el análisis de sentimientos se puede considerar como una herramienta por sí sola o más bien el
+apoyo o la ayuda para el desarrollo de otras. Si consideramos que se trata de una herramienta con entidad propia,
+las aplicaciones planteadas, siguiendo a Pang y Lee (2008), se pueden resumir en las siguientes:
+
+- Análisis de reviews de páginas web para identificar las opiniones de los compradores sobre la
+calidad de los productos, así como la positividad o negatividad de sus experiencias. En este
+caso, el análisis de sentimientos se considera como una herramienta que alcanza el objetivo
+último por sí sola.
+Las técnicas más utilizadas en este enfoque son los clasificadores
+automáticos.
+
+- Análisis de sentimientos como una herramienta para el desarrollo o la mejora de otro tipo
+de tecnologías, como pueden ser sistemas de recomendaciones o la identificación de comportamiento
+agresivo ('flame') en determinados entornos online. Para estos propósitos se suele
+utilizar la elaboración de resúmenes ('summarization').
+
+- Análisis de sentimientos en estudios de negocio para identificar la realidad subjetiva
+creada alrededor de la imagen de la empresa, así como la de sus competidores. En estos casos
+las técnicas tradicionales de recogida de datos, como la encuesta, no serían capaces de 
+recoger la subjetividad de las asociaciones al tratarse de una serie de datos no 
+estructurada.
+
+- Análisis de sentimientos aplicado a la Inteligencia gubernamental como una forma de identificar
+las fuentes temáticas o los entornos donde se pueden producir comunicaciones con
+contenidos hostiles, como podrían ser actividades terroristas.
+
+- Análisis de sentimientos unido a diferentes áreas científicas. En esta parte
+se especifica que resulta útil tanto para el análisis político, como en otros
+ámbitos, por ejemplo, el de la sociología. En esta aplicación es fundamental el 
+estudio de la polaridad de las relaciones o la negatividad o positividad de la
+interacción detectada entre diferentes actores.
+
+Por ahora, hemos considerado únicamente las utilidades que puede aportar el análisis de 
+sentimientos por sí solo o como parte de la minería de texto en un sentido que 
+podríamos considerar clásico. Es decir, una vez que se tiene claro que estas técnicas
+son aplicables y aplicadas al mundo de la empresa y/o bien de la inteligencia, sea
+gubernamental o de seguridad informática y semejantes, podemos preguntarnos: 
+¿y para qué más nos puede servir?
+
+La detección y el análisis estadísticamente-sociológico de las emociones, de forma más o menos automática, pueden dar un
+paso más allá de la mayoría de las aplicaciones que se llevan a cabo actualmente, es decir, del análisis de mercados y l
+de las campañas de captación personalizadas de clientes online (*CITA*).
+
+En este sentido, las aplicaciones del análisis de sentimientos se pueden trasladar a múltiples campos, si
+consideramos este área como un apoyo para el avance de otras ciencias:
+
+- Contribución a la eficiencia del procesamiento de los datos cualitativos a partir de las entrevistas en profundidad,
+historias de vida... con el fin de extraer conclusiones a partir de un análisis no memorístico.
+
+- Detección de las temáticas más relevantes o con una carga emocional de unas determinadas características para
+plantear un acercamiento a determinados grupos de interés sensibles o en situación de riesgo.
+
+- Posibilidad de un planteamiento de teorías basadas en la experimentación con datos reales de dinámicas y estructuras
+afectivas, donde se implica más de una emoción de forma más o menos reinterada y sistemática (*CITA*)
+
+- Detección de colectivos en riesgo de algún tipo de violencia a partir de datos obtenidos en entornos online, como
+Facebook u otras redes sociales.
+
+- Posibilidad de analizar realidades sociales complejas sin llevar a cabo recogida de datos con trabajo de campo, 
+además de las ventajas de procesamiento posterior.
+
+Además de estas aplicaciones, podría proponerse un amplio abanico de posibilidades para su aplicación a la hora
+de entrar en otros ámbitos, como podría ser el de la docencia. Esto es, estas herramientas podrían 
+servir de ayuda para los docentes a la hora de actualizar sus conocimientos o preparar temarios identificando
+las temáticas más actuales o bien cambios significativos en aspectos concretos que se enseñan. Del mismo modo, 
+ser capaces de enseñar a los alumnos a trabajar procesando cantidades considerablemente grandes de texto
+permite que todos seamos capaces de ahorrar tiempo y esfuerzo a la hora de tomar decisiones sobre qué leer,
+qué estudiar, etc.
+

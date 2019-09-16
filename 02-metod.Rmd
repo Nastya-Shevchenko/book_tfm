@@ -1,0 +1,136 @@
+# CONSIDERACIONES METODOLÓGICAS
+
+```{r , child = '_global_options.Rmd'}
+```
+
+El planteamiento metodológico corresponde a un estudio de exploración de las técnicas de análisis de
+sentimientos en cuanto a su definición, su funcionamiento y aplicación a las distintas áreas del 
+conocimiento y de la investigación. Así, para cumplir los objetivos no resulta suficiente con un 
+único enfoque, por lo que se plantea una metodología múltiple: un estudio documental, un estudio
+cuantitativo y el desarrollo de una discusión sobre lo analizado, incluyendo una reflexión sobre
+cómo mejorar las técnicas.
+
+## Metodología documental
+
+Para cumplir con los primeros cuatro objetivos contextuales de la investigación, se lleva a cabo una revisión global
+de las técnicas de análisis de sentimientos a partir de los repositorios oficiales, como Github y Cran.r-project. 
+A partir de esta, se procede a acotar los elementos seleccionados que admiten el idioma
+castellano para el análisis de texto.
+
+Siguiendo este procedimiento, se obtienen las guías disponibles online para cada uno de los paquetes, redactadas como guias
+de ayuda donde se definen las funciones que incluye el paquete y otros paquetes afines necesarios para su ejecución.
+Una vez analizadas *grosso modo* las operaciones que aporta cada una de las herramientas, se procede a determinar cuáles
+son las taxonomías de las emociones utilizadas. Es decir, no se trata de un procedimiento bibliográfico a partir del 
+cual se determina qué emociones deberían ser consideradas, sino que se estudia cuáles han sido utilizadas en las
+herramientas en cuestión.
+
+Finalmente, se revisan los documentos que contienen los 'diccionarios' o el conjunto de palabras referidas a las 
+emociones que la técnica será capaz de detectar. La importancia de este punto reside en  la formulación concreta
+de cada diccionario porque, aunque la puntuación de las palabras está habitualmente planteada en grados de positivo, 
+negativo y neutro, los resultados pueden no ser comparables si la escala de valoración no es la misma. Es decir, 
+la diferencia en la formulación de la unidad de medida de los diccionarios supone que no sean combinables entre sí.
+
+## Metodología cuantitativa
+
+La metodología cuantitativa, formulada como el procesamiento y los análisis estadísticos de los datos de texto,
+constituye la parte central del tipo puesto que permite extraer conclusiones sobre las técnicas existentes en el 
+análisis de sentimientos en R, acotado a lo que se puede aplicar a castellano. Por lo tanto, se trata de un 
+procedimiento de análisis de las técnicas a través de la presentación de unos datos concretos, en este caso,
+la base de datos CorpusCriticasCine ^[El archivo que contiene la base de datos, así como el código completo
+del presente trabajo en su estado anterior a la compilación en formato .Rmd se encuentra disponible
+en el siguiente enlace: https://www.dropbox.com/sh/i0qm1ao7izxm69c/AADVgvyBmYI4jDDMgj8dh9Kla?dl=0].
+
+En las siguientes páginas, veremos se plantearán los principales problemas de la aplicación de
+técnicas cuantitativas de procesamiento de datos extraídos de un entorno digital, así como la
+influencia que han ejercido sobre la toma de decisiones a lo largo del desarrollo del proceso
+investigador. Esta exposición se distribuye en dos partes: la exposición de las dificultades
+inherentes en parte, esperadas *a priori* y, por otro lado, los cambios producidos a lo largo
+de la definición de la problemática de estudio.
+
+### Dificultades inherentes
+
+El procesamiento de texto y la metodología aplicada a los datos extraídos del mundo 
+digital contienen, de forma inherente, una serie de dificultades a priori, que se han
+de plantear y considerar en toda investigación. En este sentido, siguiendo el planteamiento
+de Castellanos, Gómez Yáñez y Moraño (2019), resultan relevantes los siguientes puntos,
+planteados por ellos como retos:
+
+#### Reto 1: {-}
+
+El tratamiento de datos voluminosos se constituye como un gran reto para las técnicas estadísticas y 
+metodológicas, en general, aplicadas al procesamiento de los datos. En este sentido, el presente trabajo
+trata de mostrar la utilidad y la eficiencia del procesamiento automático de texto para un conjunto de textos
+consideradamente reducido (3787 críticas de cine). El volumen de datos procesado en la parte práctica,
+de ser tratado cualitativamente, sería de una naturaleza abarcable únicamente si el tiempo disponible
+y la financiación fuesen amplios.
+
+#### Reto 2: {-}
+
+La representatividad estadística es otro criterio que se suele considerar prácticamente imprescindible 
+en las investigaciones aplicadas no se refiere a esta metodología concreta porque no se conoce a la muestra,
+ni lo datos se han obtenido llevando a cabo trabajo de campo. Para solucionar este problema, 
+se plantearía una serie de ajustes metodológicos en la recogida u obtención de datos.
+
+Por otro lado, las técnicas de análisis de sentimientos están encaminadas a analizar un alto volumen de 
+datos, por lo que no sería necesario muestrear los datos, además de tener por objetivo conocer los datos
+*per se*. Esto es, no conocemos a los individuos y lo que queremos saber de ellos es lo que sienten en 
+relación al contexto y a la expresión que han utilizado. Siempre y cuando no conozcamos las características
+de perfil de las unidades de análisis, el objetivo de extrapolar no es planteable.
+  
+#### Reto 3: {-}
+
+En el ámbito sociológico, más que en el estadístico y, por supuesto, que en el computacional, el
+investigador depende de la herramienta a la hora de analizar. La plataforma de la que se extrae la 
+información, por un lado, decide los datos que podremos extraer, y, por otro lado, la herramienta
+de procesamiento de texto (para el caso del presente estudio), decide los análisis que les
+podremos aplicar y las conclusiones que podremos extraer. Esto es, el análisis se encuentra 
+condicionado de forma previa a las decisiones del propio investigador.
+    
+En este sentido, se produce una doble vertiente de limitaciones: por un lado, de las técnicas y, por
+el otro lado, las limitaciones éticas y legales, que se han de tener en cuenta en cuanto a las
+políticas de protección de datos, así como de la anonimización de los mismos. En este trabajo se
+analizan y se cuestionan las limitaciones de naturaleza técnica para los investigadores de las 
+ciencias sociales, concretamente de los y las sociólogos/as.
+
+#### Reto 4:{-}
+
+Asimismo, por el lado de la especialización, plantearemos y reforzaremos la realidad de la 
+necesidad de contribuir al desarrollo de las herramientas de análisis de datos digitales de cualquier naturaleza,
+y, por lo tanto, lo imprescindible de introducirse en lo digital,
+cuyos avances generalmente se hacen ajenos.
+
+Así, los dos últimos retos que se plantean estos autores transmiten la esencia del presente trabajo en la era
+de un procesamiento de datos que ya no es completamente relegado al trabajo manual, sea de análisis o de
+codificación previa. Se trata de las limitaciones metodológicas y la especialización.
+
+### Formulación cambiante del proceso investigador
+
+Como en todo proceso de investigación, a lo largo de su desarrollo los objetivos y la propia esencia
+del trabajo se ha visto reformulada. Si bien la naturaleza de los datos por obtención los sitúa en 
+todo caso como datos sencundarios, en el sentido de no ser obtenidos directamente por trabajo de 
+campo, la idea inicial de estudiar la emoción de la vergüenza desde la perspectiva del análisis
+de sentimientos ha sido desechada en seguida.
+
+En las técnicas de análisis de sentimientos existe un problema de formulación esencial: las emociones
+propiamente se suelen considerar como no relevantes, frente a la positividad o negatividad que el 
+individuo expresa en relación al objeto ('target') sobre el que recae esa emoción. En ese sentido, 
+finalmente la investigación tomo una redirección hacia el análisis de las técnicas de forma general,
+teniendo en cuenta la anterior problemática teórico-conceptual.
+
+Sería interesante ser capaces de clasificar los textos según las emociones expresadas o, 
+de forma simplificada, según la emoción
+que se exprese predominantemente. En cambio, este tipo de planteamientos no ha sido posible por
+dos razones: la ausencia de datos supervisados y la ausencia de procedimientos que especifiquen
+las emociones.
+
+En primer lugar, los datos supervisados (Mur) son aquellos que han sido procesados y clasificados
+previamente por algún investigador. Estos son de gran interés porque permiten que se pueda comprobar
+la bondad de la clasificación o, dicho de otro modo, en qué medida acierta el clasificador. El
+problema con el que nos encontramos es que no se ha logrado localizar un conjunto de datos de 
+estas características que, además, esté en castellano y, por otro lado, clasificado por emoción y
+no por temas.
+
+Por lo tanto, se ha tomado un conjunto de datos no supervisado en castellano que contiene una serie
+de críticas de cine. Este conjunto de datos, como veremos posteriormente, se distribuirá en variables, 
+dentro de las cuales se encuentran las dos variables de mayor interés para el presente
+trabajo: el resumen de la opinión o sumario y el texto.

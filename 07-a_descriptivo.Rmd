@@ -1,0 +1,256 @@
+# ANÁLISIS DESCRIPTIVO
+
+```{r , child = '_global_options.Rmd'}
+```
+
+Una vez que los datos están preparados para la aplicación de análisis
+estadísticos, procedemos a su exploración y descripción de sus 
+principales características.En este sentido, teniendo en cuenta las
+peculiaridades de los datos, se llevará a cabo tres procedimientos 
+específicos:
+
+1. Exploración de la distribución de frecuencias de la variable
+'puntuación', así como su representación gráfica  con 'barplot'
+2. Exploración de las palabras más frecuentes de la matriz de 
+términos y su representación gráfica con nubes de palabras
+'wordcloud'
+3. Exploración de las correlaciones existentes entre los 
+términos considerados
+
+## Exploración de la variable 'puntuación'
+
+Así, dentro de la variabilidad de datos de los que disponemos,
+la única variable directamente observable en su sentido original es 'puntuación'.
+Para analizarla, vamos a trabajar con el conjunto de datos que ha sido 
+guardado como `df_procesado`.
+
+
+```{r }
+load('data/df_procesado.RData')
+```
+
+Primeramente, con la función `summary` o resumen numérico, se pueden observar
+las principales características de esta variable, como, en este caso, el 
+mínimo (1), el máximo (5) y la media (3,048), entre otros. Así, se deduce que
+se trata de una variable que ordinal de 1 a 5, donde 1 califica a la película
+comentada como 'muy mala' y 5 como 'muy buena', siendo el 3 la opción
+neutra.
+
+```{r }
+summary(data$puntuacion)
+```
+
+En primer lugar, se calculan las frecuencias absolutas y se relativizan,
+de forma que sea posible representar las proporciones gráficamente
+después.
+
+```{r }
+frec <- table(data$puntuacion)
+perc <- round(100 * frec / sum(frec), 1); perc
+```
+
+A continuación, vemos la distribución de las frecuencias representada en
+un gráfico de barras. La distribución de las categorías recuerda una 
+distribución normal, ya que la categoría mayoritaria es la central y
+las frecuencias van disminuyendo conforme se acercan a los valores extremos.
+
+Por lo tanto, la mayor parte de las opiniones, 32,3%, se encuentran en 
+la puntuación 3 o neutral, y las puntuaciones 'muy malas' representan un 9,1%
+frente a un 11,9% de muy buenas.
+
+```{r, fig.cap="Frecuencia relativa de las diferentes puntuaciones" }
+barplot(
+  perc,
+  xlab = 'Puntuaciones',
+  ylab = '%',
+  col = "turquoise",
+  cex.names = T,
+  names.arg = c('1 (9,1%)', '2 (23,8%)','3 (32,3%)','4 (22,9%)',
+                '5 (11,9%)'),
+  border = F)
+```
+
+## Exploración de las frecuencias de términos
+
+Para comenzar la exploración de las matrices de términos, procedemos
+a la importación de los datos guardados a partir del procesamiento
+con `tm` en el capítulo anterior.
+
+```{r }
+load('data/df_dtm_sum.RData') # Sumario
+load('data/df_dtm_text.RData') # Texto
+```
+
+```{r echo = FALSE}
+df_tm_sum <- df_dtm_sum
+df_tm_text <- df_dtm_text
+```
+
+### Los términos más frecuentes
+
+A continuación, para determinar los términos más frecuentes no es necesario ya
+llevar a cabo cálculos, sino más bien ordenar los datos de los que
+disponemos a partir de las matrices. Según como estas matrices están
+formuladas, el sumatorio de los valores que se encuentran en cada
+columna es el resultado de la frecuencia absoluta de cada término.
+
+Este procedimiento es el que se aplica con la función `sort` y
+se indica que el orden deseado es 'decreciente', es decir, de mayor
+a menor.
+
+
+```{r }
+term_frecuentes_sum  <- sort(colSums(df_tm_sum), decreasing = T)
+term_frecuentes_text  <- sort(colSums(df_tm_text), decreasing = T)
+
+term_frecuentes_sum[1:15] # 15 términos más frecuentes de sumario
+```
+
+```{r, include=FALSE, eval=FALSE }
+#En el paquete `tm`
+findFreqTerms(dtm_sumario3)
+findFreqTerms(dtm_texto3)
+```
+
+### Las nubes de palabras
+
+La nube de palabras es una representación gráfica que permite observar
+de forma muy intuitiva la terminología que más ha aparecido dentro de 
+la matriz. Asimismo, llevarla a cabo requiere la utilización de una
+serie de paquetes que no se habían usado anteriormente, por lo que se
+activan.
+
+```{r message=FALSE}
+library('SnowballC')
+library('wordcloud')
+library('RColorBrewer')
+```
+
+Los elementos necesarios a indicar en la formulación de la nube son los
+nombres o las palabras y su frecuencia. Así, para combinar estas dos 
+variables creamos un data frame que incluya la frecuencia de términos,
+`term_frecuentes_sum`, por ejemplo, y establecemos esta misma como 
+su frecuencia.
+
+```{r, fig.cap="Nubes de palabras" }
+nube_sum <- data.frame(word = names(term_frecuentes_sum),
+                       freq = term_frecuentes_sum)
+
+nube_text <- data.frame(word = names(term_frecuentes_text),
+                        freq = term_frecuentes_text)
+
+wordcloud(nube_sum$word, nube_sum$freq,scale = c(4,.5), random.order = F,
+          ordered.color = T, colors = "blue", use.r.layout = T)
+
+wordcloud(nube_text$word, nube_text$freq, scale = c(5,.25), max.word = 200,
+          random.order = F, ordered.colors = T, colors = "red", 
+          use.r.layout = T)
+```
+
+## Correlaciones entre términos DTM
+
+Por último, en relación al análisis exploratorio, veremos la existencia de
+correlaciones entre los términos. Esta medición, en términos de r de 
+Pearson, indica si existe relación, además de su fuerza y su dirección.
+
+Primeramente, se crean unas matrices de correlación de todos los términos
+con los demás con la función `cor`. Tal y como está formulado, los 
+resultados presentan la correlación de cada una de las palabras con todas
+las demás ^[No se mostrarán los resultados con esta formulación, 
+atendiendo a la ineficiencia del formato], por lo que no resulta posible
+su lectura.
+
+```{r }
+correlaciones_sum <- cor(df_tm_sum, method = 'pearson')
+correlaciones_text <- cor(df_tm_text, method = 'pearson')
+
+# Con el paquete `tm`
+findAssocs(dtm_sumario3, "pelicula", corlimit = 0.3)
+findAssocs(dtm_texto3, "pelicula", corlimit = 0.3)
+```
+
+Para presentar los resultados de una forma que facilite la lectura,
+se ha de llevar a cabo una reorganización de los mismos. Con este
+fin, cargamos una serie de paquetes que incluyen herramientas para
+la manipulación de datos, `tidyr`, `tibble`y `dplyr`, y, por otro
+lado, el paquete `Hmisc`, que ofrece un cálculo de las correlaciones
+más detallado en la función `rcor`.
+
+```{r message=FALSE, warning=FALSE }
+library(Hmisc)
+library(tidyr)
+library(tibble)
+library(dplyr)
+```
+
+Creamos una función que distribuye las matrices de correlaciones
+resultantes de la función anterior en dos columnas: la primera 
+de ellas, `row`, representa los valores que se cruzaban con una misma palabra 
+por filas y la segunda, `column`, es la palabra que con la que se comparaban
+las demás.
+
+```{r }
+# Organización del data frame resultante de 4 columnas: 
+# término 1, 2, coeficiente r y p valor
+
+cor_mat <- function(cor_r, cor_p){
+  cor_r <- rownames_to_column(as.data.frame(cor_r), var = 'row')
+  cor_r <- gather(cor_r, column, cor, -1)
+  cor_p <- rownames_to_column(as.data.frame(cor_p), var = 'row')
+  cor_p <- gather(cor_p, column, p, -1)
+  cor_p_matrix <- left_join(cor_r, cor_p, by = c('row', 'column'))
+  cor_p_matrix
+}
+```
+
+Una vez que la función organizadora está formulada, se calculan
+de nuevo las correalaciones, pero esta vez con la función `rcorr`,
+que ofrece, además de los valores de correlación un p valor como
+prueba de constraste de significatividad de la misma.
+
+Solamente se debe considerar el triángulo superior de la matriz, 
+teniendo en cuenta que es simétrica. En este sentido, siempre
+van a aparecer duplicados.
+
+```{r }
+cor_sum <- rcorr(as.matrix(df_tm_sum)) # DTM de 'sumario'
+mcor_sum <- cor_mat(cor_sum$r, cor_sum$P)
+
+cor_text <- rcorr(as.matrix(df_tm_text)) # DTM de 'texto'
+mcor_text <- cor_mat(cor_text$r, cor_text$P)
+
+head(mcor_sum) # Presentación del resultado
+```
+
+Una vez que los datos están organizados, podemos explorar las
+relaciones existentes entre los términos. Así, con la 
+intención de ver qué términos son los que están más
+relacionados entre sí, de forma tanto positiva como negativa,
+procederemos a darle un orden lógico a las columnas.
+
+```{r }
+# Establecimiento de un orden descendiente
+mcor_sum_desc <- mcor_sum[with(mcor_sum, order(-mcor_sum$cor)), ] 
+mcor_text_desc <- mcor_text[with(mcor_text, order(-mcor_text$cor)), ] 
+
+# Exlusión de los casos en los que r = 1
+mcor_sum_desc <-  mcor_sum_desc %>% filter(cor != 1)
+mcor_text_desc <-  mcor_text_desc %>% filter(cor != 1)
+```
+
+Siguiendo este procedimiento, se pueden ver las relaciones más
+fuertes, tanto de forma positiva como negativa,aunque en cuanto
+a la significatividad de los valores
+p, se ha de poner en duda, teniendo en cuenta la cantidad de 
+variables consideradas.
+
+```{r }
+# Las 15 correlaciones más fuertes de 'sumario'
+mcor_sum_desc[1:10,]
+# Las 15 correlaciones más fuertes de 'texto'
+mcor_text_desc[1:10,]
+```
+
+```{r }
+cor(df_tm_sum[,'pelicula'], df_tm_sum[,'mala'])
+```

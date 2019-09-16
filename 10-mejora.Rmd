@@ -1,0 +1,198 @@
+# UNA MEJORA DE CARÁCTER INTERDISCIPLINAR
+
+```{r , child = '_global_options.Rmd'}
+```
+
+Una vez llevada a cabo la aplicación de las técnicas de procesamiento de texto y
+de análisis de sentimientos, a partir del proceso de aprendizaje del presente trabajo
+es posible ofrecer una serie de conclusiones en cuanto al futuro desarrollo de las
+herramientas estudiadas.
+
+A continuación, se expondrá una serie de aspectos a desarrollar que, como conclusión
+del análisis llevado a cabo, podrían mejorar significativamente la aplicabilidad y la
+expansión de la utilización del análisis de sentimientos por las diferentes ramas del
+saber.
+
+## Desde la Computación
+
+En primer lugar, una parte crucial en el desarrollo del trabajo ha sido el 
+acercamiento a los aspectos computacionales del análisis de sentimientos,
+entendidos, sobre todo, en relación al uso de código, en vez de interfaz.
+Llevando a cabo este procedimiento, se puede ver aquellas acciones aplicables
+directamente y otras que hay que programar manualmente.
+
+Hay determinados aspectos a mejorar que no están directamente relacionados
+con el análisis de sentimientos, pero que sí afectan a su funcionamiento.
+A continuación, se expondrán una serie de actuaciones que podrían
+contribuir significativamente a su mejora, desde la perspectiva del 
+funcionamiento en general:
+
+- Creación de funciones que permitan una lectura automática de los datos
+desde diferentes formatos de entrada, así como encodings. Esta parte ha 
+supuesto parones significativos en el trabajo, puesto que son pocas las
+herramientas en `R`capaces de importar datos que tengan alguna clase de errores
+de formulación en ese formato. Es posible contemplar estos problemas y elaborar funciones
+o bien paquetes que sean capaces de operar con más de un formato y/o
+encoding a la vez, en caso de ser necesario.
+- Determinación de las salidas de resultados deseadas: sería interesante 
+que existiese un abanico de posibilidades para escoger a la hora de aplicar
+determinadas funciones. Esto es, en las herramientas utilizadas habitualmente
+el formato de salida, así como los resultados que se obtienen, están 
+prefijados y no se encuentran, al menos de forma documentada,
+opciones internas configurables para cambiar aspectos
+como la organización de la salida, las variables que se quieren extraer, etc.
+- Evitar o eliminar en la medida de lo posible la dependencia de otros 
+paquetes o librerías de `R`: los paquetes observados se especializan en 
+la elaboración de una serie de funciones que, por ejemplo, depuran los
+datos. Sin embargo, estas funciones admiten únicamente determinados tipos
+de datos de entrada y, muchas veces, no son compatibles con librerías
+de organización de los datos. En este sentido, un aspecto importante para
+ser trabajado es la compatibilidad entre paquetes o bien la expansión de
+las utilidades, con el fin de crear una aplicabilidad más cómoda.
+- Automatizar los procesos. Cuando nos encontramos en un entorno sin 
+interfaz, las posibilidades de configuración se amplían significativamente.
+En este sentido, es posible desarrollar determinados procesos que 
+reproduzcan una serie de pautas llevando a cabo un análisis, con los
+parámetros deseados a definir, de forma automática desde, por ejemplo,
+la depuración de los datos o una vez que los datos estén depurados.
+Una vez que se tenga claro el objetivo del análisis, la automatización
+permite ahorrar tiempo y esfuerzo, así como hacer el proceso 
+investigador eficiente.
+- Revisión de los algoritmos que determinan el funcionamiento
+interno del flujo del programa. Este aspecto es quizás el más 
+alejado de las posibilidades de cualquier persona que no se
+dedique plenamente a la informática. Sin embargo, se trata
+de un aspecto relevante en cuanto a que determinados procedimientos
+consumen cantidades considerables de memoria interna y de 
+tiempo de computación, lo que dificulta el proceso de investigación.
+Una reconsideración del funcionamiento interno podría permitir
+un flujo de acciones eficiente.
+
+Por otro lado, en relación a las utilidades con posible desarrollo para
+el análisis de sentimientos como tal, podríamos proponer las siguientes
+actuaciones:
+
+- Extracción de diccionarios temáticos. En el enfoque no supervisado de los
+datos se utilizan recursos léxicos limitados, que parten principalmente de
+una serie de grandes diccionarios elaborados por expertos. En cambio, cada
+temática estudiada y cada conjunto de datos tiene un carácter propio y
+puede ser de interés conocer el léxico de forma aplicada. En este sentido,
+es posible crear funciones que extraigan léxico propio de los datos 
+estudiados, lo que permitiría ser capaces de captar los aspectos
+clave, así como depurar aquella terminología que no aporta significado.
+Por ejemplo, en el caso de las críticas de cine, se podría prescindir de
+palabras como "película" o "cine", para centrarnos en aquello que
+realmente aporte información concreta.
+- Elaborar paquetes con más funcionalidades. En primer lugar, ess necesario elaborar 
+funciones destinadas a la determinación e identificación de las emociones
+que se encuentran en un determinado texto o en un conjunto de ellos. Así, como
+facilitar el estudio de las emociones entre sí. Esto es, conceder la importancia
+a las propias emociones y no tanto a las estructuras duales "positivo-negativo".
+
+Por último, relacionado también con la computación, lo lógico es pensar que
+no todas aquellas personas que quieran utilizar el análisis de sentimientos
+querrá o podrá llevar a cabo la necesaria introducción al lenguaje de programación
+utilizado. Por este motivo, sería de gran utilidad plantear una serie de mejoras
+que puedan introducir a estas personas en las técnicas, sin tener conocimientos
+informáticos avanzados.
+
+- Creación de interfaz. Una vez que las herramientas sean mejoradas, es posible,
+sin necesidad de ser informático, crear una interfaz que posibilite la aplicación
+del análisis sin tener que utilizar código directamente. Actualmente, `RStudio`
+ofrece la posibilidad de crear interfaces disponibles online con la ayuda de 
+su expansión llamada`Shiny` ^[Para más información, consulte la siguiente
+página web: https://shiny.rstudio.com/].
+- Creación de recursos online para dar soporte técnico y resolver dudas, es
+decir, la creación de una página web o blog que permita una comunicación
+directa con los usuarios o que, en el caso de que no se quiera tener una
+interacción, sirva para la exposición de las posibilidades que ofrece
+el análisis de sentimientos, así como las utilidades de la posible interfaz.
+Estas utilidades también pueden ser desarrolladas sin tener amplios
+conocimientos de diferentes lenguajes de programación con la ayuda de
+herramientas como `R Markdown` ^[Para más información, consulte:
+https://rmarkdown.rstudio.com/], que permite crear páginas web o bien blogs,
+con el paquete `blogdown` (Fernández Casal, 2017) ^[Para más información
+consultar el siguiente enlace: https://bookdown.org/yihui/blogdown/].
+
+## Desde la Estadística
+
+Hasta ahora únicamente hemos hablado del papel del propio funcionamiento
+de las herramientas y cómo se puede influir en él. En cambio, el enfoque
+computacional muchas veces tiene en cuenta únicamente las frecuencias
+encontradas en los datos de texto o bien estas mismas puestas en relación
+a un diccionario concreto.
+
+Sin embargo, para dar calidad al análisis de sentimientos es preciso 
+manejar una metodología estadística de fondo que vaya más allá. En
+este sentido, es preciso dar cuenta a los siguientes aspectos:
+
+- Creación de estimadores. Actualmente, en el enfoque no supervisado,
+las emociones son medidas en función de las frecuencias de palabras
+positivas y negativas, relacionadas con sus cargas en cuanto a la
+influencia de otro tipo de palabras, como es el caso de los negadores.
+En cambio, el desarrollo de estimadores complejos consistentes en 
+procedimientos estadísticos pueden considerarse inexistentes en
+este contexto.
+- Ponderación de emociones. Una vez que las emociones están identificadas,
+resulta necesario tener en cuenta aspectos como su naturaleza o 
+intensidad. Esto es, se puede estudiar la positividad o negatividad de
+una emoción concreta o bien el grado de la emoción. Por ejemplo, en 
+el caso de la vergüenza, podríamos considerar que existen diferentes 
+niveles, dentro de los que se encuentran la timidez, el ridículo, la
+humillación, etc. ^[Siguiendo, por ejemplo, a Gottschalk, A. y Gleser, G. (1969), 
+Manual of instructionforusingtheGottschalk-Gleser Content AnalysisScales,
+Berkeley, University of California Press. ] El objetivo
+estaría en determinar en qué nivel se encuentra la emoción expresada.
+En este sentido, sería posible medir la emoción por sí sola, así como
+en relación a otras.
+- Constitución de una pauta de combinación de unidades de medida
+de los diferentes diccionarios para que sea posible su aplicación
+conjunta.
+
+## Desde la Sociología
+
+Quizás lo más destacable para la sociología está en que, a pesar de no que esta técnica 
+se desarrolla por parte de computación y lingüística, es igualmente necesario partir de 
+alguna teoría de las emociones. En las técnicas de análisis de sentimientos las
+taxonomías de las emociones utilizadas como base para el desarrollo se denominan
+*modelos*.
+
+Esto indica que no se trata de una definición de la realidad, sino de una
+formulación concreta de elementos que dan un determinado resultado, como
+ocurre cuando hablamos de *modelos* en, por ejemplo, un análisis de regresión.
+Además, estos modelos proceden de casi exclusivamente de los campos de la psicología
+y la economía (Miranda, & Guzmán, 2017).
+
+En este sentido, el papel de la sociología, desde la perspectiva de este
+estudio, se encuentra principalmente en dos aspectos: la aportación de 
+teorías de las emociones, así como su interacción, y la contribución a la
+cohesión de las distintas ramas que saber que se cruzan en el análisis de
+sentimientos, a través de la búsqueda de una expresión e interpretación
+de la metodología de forma que sea comprensible para investigadores de
+distintas ramas.
+
+Así, las principales actuaciones en el estado actual de la cuestión,
+son las siguientes:
+
+- El replanteamiento de las emociones como centro de la investigación del análisis 
+de sentimientos, evitando la simplificación polar. Es decir, la Sociología de 
+las Emociones está en una fase de trascender la justificación de la necesidad
+del análisis de las emociones y de su importancia, sin embargo, se trata
+de una rama muy concreta y, en el mundo científico en general, este aspecto
+no está superado. En este sentido, es necesario remarcar la importancia de las
+propias emociones más allá de su utilización con fines lucrativos.
+- El replanteamiento de los diccionarios en castellano, tratando de definir los 
+diferentes grados de las emociones, así como conglomerando las palabras, de modo
+que sea posible establecer relaciones y obtener una mayor precisión. Esto es,
+la existencia de los recursos léxicos no ofrece en ningún momento la 
+definición de lo que se entiende por las emociones, por lo que el análisis
+se convierte en significativamente arbitrario en cuanto a su interpretación.
+
+Por último, como mejora general que influiría en todo el proceso, se puede
+hablar de la propia participación de los sociólogos en el desarrollo, la 
+utilización y la aplicación de estas técnicas. Es cierto que a veces es
+necesario abrir el abanico para ser capaces de adaptarse, pero se compensa
+con el carácter inherente de la mirada sociológica y por la disposición
+de muchos sociólogos de introducirse en lo desconocido, como en el caso
+del presente trabajo, aunque suponga un proceso de aprendizaje de 
+programación.

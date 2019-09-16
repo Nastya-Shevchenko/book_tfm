@@ -1,0 +1,93 @@
+
+# CONCLUSIONES
+
+El objetivo principal de este trabajo ha consistido en llevar a cabo una aproximación 
+hacia las herramientas computacionales y estadísticas desarrolladas para analizar
+las emociones, concretamente, el análisis de sentimientos con el lenguaje de programación
+`R`. Esta temática está alejada de la investigación social, debido a un conjunto de 
+razones entre las cuales se pueden encontrar las diferencias de definición terminológica,
+la separación y desconexión existente entre las ciencias, las limitadas posibilidades
+de la creación y del desarrollo de herramientas computacionales en relación a la
+especialización de las profesiones, etc.
+
+En este sentido, el esfuerzo de llevar a cabo este trabajo recae, sobre todo, en tratar de
+aproximar en última instancia, las ciencias, creando un punto de encuentro y dar luz
+a un enfoque que se está desarrollando y que puede ser inmensamente útil en los estudios
+sociológicos.
+
+Resulta de gran interés ser capaces de no solo aportar a la ciencia, sino de combinar
+los diferentes conocimientos y las diferentes formas de conocer, lo que responde al
+dicho popular eslavo "una cabeza está bien, pero dos está mejor". Es decir, uniendo
+los esfuerzos de las diferentes ramas del saber es posible mejorar la producción del 
+conocimiento y su calidad, así como hacer posibles determinadas tareas que manualmente
+son inabarcables, como, por ejemplo, el procesamiento de grandes cantidades de texto.
+
+El aspecto que se puede suponer como la principal dificultad de la separación entre 
+los científicos de diferentes ramas, en este caso, de computación, estadística y 
+sociología, se encuentra en determinados vacíos de conocimiento que debería ser
+común. Esto es, resulta imprescindible que haya personas dispuestas a aprender y
+a alejarse de los estándares de su propia ciencia con el fin de ser capaces de
+crear puentes, entendiendo ambas partes.
+
+En este sentido, considero que el proceso de aprendizaje de este trabajo incluye
+una parte inherente y transversalmente sociológica en cuanto al intento de 
+comprender las mecánicas que subyacen a la formulación de las técnicas de 
+análisis de sentimientos y otra parte fundamental de aprendizaje estadístico
+y, sobre todo, computacional.
+
+## Objetivos específicos
+
+La presente investigación se establece como el resultado de una inmersión en
+terreno desconocido, por lo que ha tenido que pasar por diferentes fases de
+formulación, antes de poder ser constituido. En este sentido, los diferentes
+objetivos han sido formulados de forma que, primeramente, fuese posible
+llevar a cabo una aproximación al terreno, antes de ser capaces de aplicar
+las técnicas de interés.
+
+En cuanto al primer conjunto de objetivos teóricos, se ha descrito lo que se
+entiende por análisis de sentimientos y se ha contextualizado su posición dentro
+del análisis de texto en general. Posteriormente se han revisado las herramientas
+disponibles en `R`, analizando su constitución.
+
+Los objetivos empíricos se han cumplido en cuanto a que se ha utilizado un 
+conjunto de datos real, siendo este procesado y expuesto al proceso de análisis
+de texto, llevando a cabo sobre él un análisis de polaridad con la función
+`polarity`.
+
+Por último, quizás el objetivo más complicado para ser cumplido ha sido el
+estudio de las técnicas existentes para detectar las emociones concretas,
+puesto que se trata de una clase de herramientas que, en el contexto de la
+acotación del presente trabajo, se podrían considerar inexistentes.
+
+## Futuras líneas de investigación
+
+El presente trabajo refleja un intento de adaptación de las metodologías
+clásicas utilizadas en sociología hacia la era de las técnicas del 
+mundo digital, teniendo en cuenta las dificultades que eso conlleva.
+
+En este sentido, las limitaciones que tiene este estudio se encuentran
+en la propia definición de un estudio exploratorio que se lleva a cabo 
+en un campo desconocido. Se trata de un planteamiento que no toma por
+objetivo sacar conclusiones sobre una serie de datos concretos, ni de 
+comprender una realidad *per se*, sino de formas de investigar, de 
+entender la investigación y de crear conocimiento.
+
+En este sentido, la continuación natural que se puede plantear es la 
+aplicación de análisis multivariantes a los resultados de los datos
+transformados a variables numéricas, como, por ejemplo, a partir
+de la `matriz de documentos término`. A partir de estos datos es 
+posible llevar a cabo técnicas de clasificación y de regresión, tomando
+como referencia la variable puntuación o bien convirtiendo alguna otra en
+factor.
+
+En cambio, a pesar de que la falta de la aplicación de técnicas multivariantes
+puede resultar llamativa, estas no entran dentro de los objetivos propuestos.
+Lo que resulta verdaderamente relevante de cara al futuro es replantear 
+la polarización de las emociones y la constitución de los diccionarios en 
+el enfoque de los datos no supervisados.
+
+Si fuese posible continuar este trabajo, la vía principal que escogería
+sería el replanteamiento de la constitución de los diccionarios empleados, 
+el desarrollo de recursos léxicos para castellano, no derivados de inglés, 
+así como el establecimiento de parámetros de depuración del texto
+según las temáticas necesarias.

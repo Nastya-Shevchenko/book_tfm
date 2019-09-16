@@ -1,0 +1,179 @@
+# MANIPULACIÓN DE DATOS DE TEXTO
+
+```{r , child = '_global_options.Rmd'}
+```
+
+A la hora de aproximarse al mundo del análisis de datos, se hace notorio
+que una de las cuestiones más complejas a priori es el manejo de los datos.
+Cuando hablamos del manejo o la manipulación de los datos nos referimos a 
+cuestiones que podrían parecer sencillas, nada más lejos de la realidad.
+Entre estas cuestiones se encuentra:
+
+* Ser capaces de abrir y leer los archivos desde, en este caso, `R`.
+* Ser capaces de editar los datos.
+* Ser capaces de organizar los datos como nos resulte más cómodo para visualizar o procesar.
+* Ser capaces de transformar los datos y guardarlos para análisis posteriores.
+
+
+En este capítulo, se explicará el proceso seguido para lograr la manipulación
+de datos del CorpusMuchoCine, pasando por la importación de los datos, la
+extracción de la información deseada, la organización de esta información,
+su preprocesamiento y, por último, el guardado de los datos preparados para
+ser utilizados en análisis.
+
+```{r include = FALSE}
+library(bookdown)
+options(width = 70) # Establecimiento del ancho
+knitr::opts_chunk$set(width = 70, cache = TRUE)
+```
+
+
+Inicialmente, se cargan los paquetes que se refieren a la depuración de los textos
+(`tm`), la lectura de archivos '.xml' (`XML` y `xml2`) y la organización y visualización
+amigable de los datos (`dplyr`) ^[Con el fin de no entorpecer la lectura, las
+referencias de los paquetes utilizados se expondrán en la Bibliografía].
+A lo largo de los capítulos se cargarán los paquetes
+que sean necesarios en cada momento, por lo que la lista de todos ellos se podrá ver
+únicamente en Anexos.
+
+```{r message = FALSE }
+library(tm)
+library(XML)
+library(xml2)
+library(dplyr)
+```
+
+## Obtención de los datos
+
+No hay muchos conjuntos de datos para pruebas de análisis de texto preparados para
+castellano, por lo que, de no encontrarse, sería necesario recurrir a técnicas de
+extracción, recopilación y organización de los datos a partir de web scraping,
+es decir, descarga automática de texto a partir de fuentes públicas.
+En este caso, para evitar esa dificultad añadida, se ha procedido a contemplar
+qué bases de datos se han llegado a utilizar en artículos científicos especializados
+para castellano.
+
+
+A partir de la revisión de la literatura, se ha localizado una base de datos 
+denominada 'CorpusMuchoCine', que contiene 4380 archivos de formato '.xml', 
+extraídos a partir de críticas de cine en la página web 'muchocine.net'.
+Cada uno de los archivos incluye la siguiente información:
+
+* Nombre del usuario que ha dejado el comentario.
+* El título de la película que ha comentado.
+* Un resumen de su comentario (`sumario`).
+* El comentario, formulado como un texto significativamente más largo (`texto`).
+* La puntuación asignada a la película, de 1 (muy mala) a 5 (muy buena).
+
+
+Esta base de datos se ha descargado de la página web de la Universidad de Sevilla,
+^[http://www.lsi.us.es/~fermin/index.php/Datasets],
+concretamente desde el enlace a su creador, Fermín Cruz Mata. Este profesor creó 
+el conjunto para su artículo 'Clasificación de documentos basada en la opinión:
+experimentos con un corpus de críticas de cine español' en 2008.
+
+## Preparación del data frame
+
+Para poder trabajar con estos datos, inicialmente se ha de lidiar con una
+serie de problemas inherentes a ellos. El primer problema a solucionar es
+el tratamiento de los datos que están en formato '.xml' 
+y la forma en la que divide las diferentes variables.
+La decisión tomada consistió en construir un data frame con 4 variables,
+excluyendo el nombre de los usuarios, y guardarlo en un único archivo
+de tipo RData.
+
+Encontrar una solución eficiente no es una cuestión sencilla en cuanto a que
+el procesamiento de estos datos con los paquetes especializados para el 
+tratamiento con el formato '.xml' no han sido capaces de leer el texto.
+Esta dificultad añadida ha surgido a partir de problemas de codificación y, también,
+de la propia separación de los datos de texto, pues a veces el formato
+de '.xml' no sigue el estándar, mezclándose con el 'html'.
+
+
+A la hora de tratar de importar los datos, se producían errores que no permitían
+la lectura de los ficheros, debido a que había caracteres que no estaban
+codificados en 'UTF-8'. Estos problemas se encuentran en los datos originales,
+siendo propios de la descarga y formulación de la base de datos con un 
+procedimiento de web scraping.
+
+Inicialmente, se intentó llevar a cabo una depuración con la ayuda del
+programa NotePad++. En cambio,  esta forma de proceder era considerablemente manual 
+y daba un resultado de aproximadamente 800 archivos legibles  de un total de 4380.
+
+
+Finalmente, con la ayuda de la función `read_html` del paquete `xml2`, ha sido
+posible leer 3878 textos y, posteriormente, convertirlos en una base de datos
+contenida en un único archivo. El tamaño de la base de datos ha sido reducido
+debido a que se ha indicado que aquellos archivos que no cumplen la condición
+exigida o, dicho de otro modo, den error se conformen como `NAs`, es decir,
+que se excluyan.
+
+
+A continuación, se expresa el procedimiento concreto que se ha seguido para
+la conformación de esta base de datos unificada. Así, en primer lugar, se 
+establece un directorio desde el que se importarán los archivos de trabajo y
+en el que se guardarán todos los arcvivos creados.
+
+```{r eval=FALSE}
+basePath <- './corpusCriticasCine' # Directorio de trabajo
+
+# Patrón de archivos que la función tendrá que procesar
+files <- dir(basePath, pattern = '*.xml') 
+```
+
+Se crea una base de datos vacía con un número de filas de tanta longitud
+como tenga el número de archivos que se ha tomado a partir del objeto
+'files' y con cuatro columnas, cuyos nombres se indican. Este procedimiento
+permite que los datos sean organizados de una forma computacionalmente
+eficiente,además de tener una forma específica decidida en relación a los
+tratamientos posteriores que se llevarán a cabo.
+
+```{r eval=FALSE}
+# Creamos una dataframe vacío para guardar los datos
+n <- length(files);
+data <- data.frame(matrix(NA, nrow = n, ncol = 4))
+names(data) <- c('puntuacion', 'titulo', 'sumario', 'texto')
+```
+
+El paso siguiente consiste en crear una función que abra y lea cada uno
+de los archivos originales en '.xml' en la carpeta donde se encuentran
+y extraiga la información dentro de las variables, sin tener en cuenta
+la estructura de estos archivos.
+
+
+Esto se consigue indicándole que, para el caso de la variable `sumario`
+extraiga aquello que en '.xml' está contenido en el apartado de
+'xpath' como `res$summary`, teniendo en cuenta que el original tiene
+una codificación 'Windows-1252'.
+
+
+Esta función, por otro lado, indica en cada variable qué naturaleza
+ha de tener la nueva variable que se ha de conformar, es decir, si 
+va a ser de tipo 'caracter' (texto) o de tipo numérico. También se
+indica que este procedimiento se haga para cada archivo, siguiendo 
+un objeto llamado 'contador', es decir, a partir del primer archivo,
+la siguiente acción se hará sobre el número de ese archivo +1, lo 
+que viene a indicar el archivo inmediatamente posterior.
+
+```{r eval=FALSE}
+# Organizamos y escribimos la información dentro del data frame creado
+contador <- 1
+
+for (f in files) {
+ tmp <- read_html(file.path(basePath, f), encoding = 'Windows-1252')
+ res <- as_list(tmp)$html$body$review
+ data$sumario[contador] <- as.character(res$summary)
+ data$texto[contador] <- if (length(res)>1) as.character(res[[2]]) 
+ else NA_character_
+ data$titulo[contador] <- attributes(res)$title
+ data$puntuacion[contador] <- as.numeric(attributes(res)$rank)
+ contador <- contador + 1}
+```
+
+Por último, indicamos que se guarde la información creada en las cuatro variables
+en el directorio de trabajo con el nombre 'data' y formato propio de R 'RData'.
+
+```{r eval=FALSE}
+# Guardamos la base de datos en el directorio
+save(data, file = '../data.RData')
+```
